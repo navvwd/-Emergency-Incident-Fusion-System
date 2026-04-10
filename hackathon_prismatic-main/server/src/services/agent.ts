@@ -301,30 +301,6 @@ export async function processMessage(
   // Extract context from user message
   extractContext(session, textMessage);
 
-<<<<<<< HEAD
-=======
-  // ── Hard bypass: Meta questions never reach LLM ──
-  const META_PATTERNS = [
-    /what are you/i, /who are you/i, /your (purpose|role|instructions|job|prompt)/i,
-    /are you (an? )?(ai|bot|robot|machine|program)/i,
-    /who (made|built|created) you/i, /your (system|prompt)/i,
-    /what (were|are) you (told|programmed|designed|supposed) to/i,
-  ];
-  const isMetaQuestion = META_PATTERNS.some(p => p.test(textMessage));
-  if (isMetaQuestion) {
-    const metaResponse = "I'm the person on the other end of this call. Right now, the only thing that matters is helping you. What's happening?";
-    session.history.push({ role: 'agent', content: metaResponse, timestamp: new Date() });
-    updateSession(session);
-    return {
-      text: metaResponse,
-      transcript,
-      actions: generateActions(session),
-      sessionId: session.sessionId,
-      stage: session.stage,
-    };
-  }
-
->>>>>>> c91130b (naveeth changes)
   // Get AI response using Sarvam Chat
   const agentResponse = await generateAgentResponse(session, textMessage);
 
@@ -352,7 +328,6 @@ export async function processMessage(
 }
 
 // ─── Context Extraction ──────────────────────
-
 function extractContext(session: AgentSession, message: string): void {
   const lowerMsg = message.toLowerCase();
 
@@ -379,7 +354,6 @@ function extractContext(session: AgentSession, message: string): void {
       /near\s+([^.!,]+)/i,
       /location[\s:is]+([^.!,]+)/i,
     ];
-
     for (const pattern of locationPatterns) {
       const match = message.match(pattern);
       if (match) {
@@ -410,46 +384,11 @@ function extractContext(session: AgentSession, message: string): void {
 }
 
 // ─── Generate Agent Response ─────────────────
-
 async function generateAgentResponse(
   session: AgentSession,
   userMessage: string
 ): Promise<{ text: string }> {
   try {
-<<<<<<< HEAD
-    const prompt = buildAgentPrompt(session, userMessage);
-    const client = require('./sarvam').getSarvamChatClient();
-
-    const response = await client.post('/v1/chat/completions', {
-      model: 'sarvam-30b',
-      messages: [
-        {
-          role: 'system',
-          content: `You're an experienced emergency responder - calm, capable, and human. You talk like a real person, not an AI.
-
-How to respond:
-- Warm, conversational tone (use "I'm here" not "I am here")
-- Short, punchy sentences people can follow when stressed
-- Show you care - "I know this is hard" not "Acknowledging difficulty"
-- One or two questions at a time, naturally phrased
-- No bullet points, no numbered lists, no robotic formatting
-
-You're talking to someone in a crisis. Be the calm voice they need.`,
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      temperature: 0.7,
-      max_tokens: 2048,
-    });
-
-    const msg = response.data.choices?.[0]?.message;
-    return {
-      text: msg?.content || msg?.reasoning_content || getFallbackResponse(session.stage),
-    };
-=======
     const client = require('./sarvam').getSarvamChatClient();
 
     // ── STRUCTURAL FIX: Instructions in system role, not user ──
@@ -532,26 +471,12 @@ You're talking to someone in a crisis. Be the calm voice they need.`,
     text = text.replace(/\*\*/g, '').replace(/##/g, '').replace(/^\d+\.\s/gm, '').trim();
 
     return { text: text || getFallbackResponse(session.stage) };
->>>>>>> c91130b (naveeth changes)
   } catch (error) {
     console.error('[Agent] Chat completion failed:', error);
     return { text: getFallbackResponse(session.stage) };
   }
 }
 
-<<<<<<< HEAD
-// ─── Fallback Responses ──────────────────────
-
-function getFallbackResponse(stage: string): string {
-  const fallbacks: Record<string, string> = {
-    greeting: "Hey, I'm here. Take a breath - we'll handle this together. What's going on?",
-    assessing: "Where are you right now? And is anyone hurt?",
-    gathering: "Tell me more - what's happening there?",
-    advice: "Okay, here's what I need you to do. First, make sure you're safe.",
-    closing: "You've done great. Help is coming. Stay with me.",
-  };
-  return fallbacks[stage] || fallbacks.greeting;
-=======
 /** Stage context for system prompt (no conversation history, no user message) */
 function getStageContext(session: AgentSession): string {
   const ctx = session.context;
@@ -603,7 +528,6 @@ function getFallbackResponse(stage: string): string {
   };
   const options = fallbacks[stage] || fallbacks.greeting;
   return options[Math.floor(Math.random() * options.length)];
->>>>>>> c91130b (naveeth changes)
 }
 
 // ─── Generate Actions ────────────────────────

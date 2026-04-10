@@ -46,15 +46,10 @@ Report type: ${reportType}
 Content: "${processedText}"
 
 Rules:
-<<<<<<< HEAD
-- Location should include area name AND city
-- affected_count should be 0 if not mentioned
-=======
 - Location should include area name AND city. Use ALL available clues: GPS coordinates, metadata location, street signs, building names, landmarks, vehicle number plates (Indian plates encode state/district).
 - If GPS coordinates are provided in the content (from image metadata), use them for latitude/longitude and try to identify the nearest known area/city for the location field.
 - If the content mentions signs, shop names, or landmarks, use those to determine the area.
 - affected_count should be 1 if not mentioned (at minimum, the reporter is affected)
->>>>>>> c91130b (naveeth changes)
 - severity_score is between 1 and 10
 
 Respond ONLY with valid JSON:
@@ -69,21 +64,6 @@ Respond ONLY with valid JSON:
 }`;
 }
 
-<<<<<<< HEAD
-export async function speechToText(audioBuffer: Buffer, fileName: string): Promise<SarvamSTTResponse> {
-  const start = Date.now();
-  const client = getSarvamClient();
-
-  try {
-    const form = new FormData();
-    form.append('file', audioBuffer, {
-      filename: fileName,
-      contentType: 'audio/webm',
-    });
-    form.append('model', 'saaras:v2.5');
-
-    const response = await client.post<SarvamSTTResponse>('/speech-to-text-translate', form, {
-=======
 /**
  * Unified STT using Sarvam v3 /speech-to-text endpoint.
  * - English: 1 call (transcribe) → done
@@ -107,23 +87,10 @@ export async function speechToText(
     form.append('mode', 'transcribe');
 
     const response = await client.post('/speech-to-text', form, {
->>>>>>> c91130b (naveeth changes)
       headers: {
         ...form.getHeaders(),
         'api-subscription-key': process.env.SARVAM_API_KEY!,
       },
-<<<<<<< HEAD
-    });
-
-    const elapsed = Date.now() - start;
-    console.log(`[Sarvam STT] Transcribed in ${elapsed}ms | lang=${response.data.language_code}`);
-
-    return {
-      transcript: response.data.transcript,
-      language_code: response.data.language_code,
-      language_confidence:
-        response.data.language_confidence ?? (response.data as any).language_probability ?? null,
-=======
       timeout: 8000,
     });
 
@@ -183,7 +150,6 @@ export async function speechToText(
       language_code: langCode,
       language_confidence: confidence,
       translatedText,
->>>>>>> c91130b (naveeth changes)
     };
   } catch (error: any) {
     const elapsed = Date.now() - start;
@@ -249,20 +215,12 @@ export async function extractImage(imageBuffer: Buffer, fileName: string): Promi
         {
           role: 'system',
           content:
-<<<<<<< HEAD
-            'You are an OCR and image text extraction system. Extract all visible text and signage. If text is in an Indian language, also provide English translation.',
-=======
             'You are an OCR and image text extraction system for emergency reports. Extract ALL visible text — especially street signs, shop names, building names, road names, vehicle number plates, area names, banners, hoardings, and any text that can help identify the location. If text is in an Indian language, also provide English translation.',
->>>>>>> c91130b (naveeth changes)
         },
         {
           role: 'user',
           content: [
-<<<<<<< HEAD
-            { type: 'text', text: 'Extract all text visible in this image.' },
-=======
             { type: 'text', text: 'Extract all text visible in this image. Pay special attention to any text that reveals the location — street signs, building names, shop boards, number plates, landmarks.' },
->>>>>>> c91130b (naveeth changes)
             { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64Image}` } },
           ],
         },
@@ -280,11 +238,7 @@ export async function extractImage(imageBuffer: Buffer, fileName: string): Promi
     const elapsed = Date.now() - start;
     const msg = error.response?.data?.message || error.response?.data?.error?.message || error.message;
     console.error(`[Sarvam Vision] Failed after ${elapsed}ms: ${msg}`);
-<<<<<<< HEAD
-    return '';
-=======
     throw new Error(`[Sarvam Vision] Image extraction failed: ${msg}`);
->>>>>>> c91130b (naveeth changes)
   }
 }
 
@@ -318,11 +272,7 @@ export async function chatCompletion(text: string, reportType: string): Promise<
       }
 
       parsed.severity_score = Math.max(1, Math.min(10, parsed.severity_score));
-<<<<<<< HEAD
-      parsed.affected_count = Math.max(0, parsed.affected_count ?? 0);
-=======
       parsed.affected_count = Math.max(1, parsed.affected_count ?? 1);
->>>>>>> c91130b (naveeth changes)
       return parsed;
     } catch (error) {
       if (retryCount < 1) {
@@ -345,8 +295,6 @@ export async function chatCompletion(text: string, reportType: string): Promise<
     throw new Error(`[Sarvam Chat] Entity extraction failed: ${msg}`);
   }
 }
-<<<<<<< HEAD
-=======
 
 /**
  * Text-to-Speech using Sarvam Bulbul v3.
@@ -397,4 +345,3 @@ export async function textToSpeech(
     throw new Error(`[Sarvam TTS] Text-to-speech failed: ${msg}`);
   }
 }
->>>>>>> c91130b (naveeth changes)

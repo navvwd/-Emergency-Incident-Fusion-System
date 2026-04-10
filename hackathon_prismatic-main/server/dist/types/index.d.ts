@@ -37,14 +37,6 @@ export interface ExtractedData {
     severity_score: number;
     summary: string;
 }
-<<<<<<< HEAD
-/** Saaras Speech-to-Text / Speech-to-Text-Translate response */
-export interface SarvamSTTResponse {
-    transcript: string;
-    language_code: string;
-    /** Called language_probability in the /speech-to-text-translate response */
-    language_confidence: number | null;
-=======
 /** Saaras v3 Speech-to-Text response (unified /speech-to-text endpoint) */
 export interface SarvamSTTResponse {
     transcript: string;
@@ -53,7 +45,6 @@ export interface SarvamSTTResponse {
     language_confidence: number | null;
     /** English translation (populated only for non-English transcripts) */
     translatedText?: string;
->>>>>>> c91130b (naveeth changes)
 }
 /** Language Identification response */
 export interface SarvamLIDResponse {
@@ -99,10 +90,7 @@ export interface DedupMatch {
     incident_id: string;
     similarity: number;
 }
-<<<<<<< HEAD
-=======
 export type DedupStatus = 'completed' | 'skipped_error' | 'skipped_timeout' | 'skipped_no_embedding';
->>>>>>> c91130b (naveeth changes)
 export interface StoreRawReportParams {
     report_type: ReportType;
     raw_content: string | null;
@@ -112,8 +100,6 @@ export interface StoreRawReportParams {
     incident_id: string;
     source_language: string;
     processing_time_ms: number;
-<<<<<<< HEAD
-=======
     dedup_status?: DedupStatus;
 }
 export interface FusionScoreBreakdown {
@@ -167,7 +153,6 @@ export interface IngestReportResponseWithFusion extends IngestReportResponse {
     score_breakdown: FusionScoreBreakdown | null;
     timings?: PipelineTimings;
     dedup_status?: DedupStatus;
->>>>>>> c91130b (naveeth changes)
 }
 export interface AgentSession {
     sessionId: string;

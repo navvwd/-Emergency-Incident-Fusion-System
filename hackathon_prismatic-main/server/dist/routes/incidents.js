@@ -23,16 +23,12 @@ router.get('/incidents', async (_req, res) => {
         if (error) {
             throw new Error(error.message);
         }
-<<<<<<< HEAD
-        res.status(200).json(data);
-=======
         const withConfidence = (data ?? []).map((incident) => ({
             ...incident,
             fusion_confidence: incident.report_count >= 3 ? 'high' :
                 incident.report_count >= 2 ? 'medium' : 'low',
         }));
         res.status(200).json(withConfidence);
->>>>>>> c91130b (naveeth changes)
     }
     catch (error) {
         console.error(`[Incidents] GET failed: ${error.message}`);
@@ -43,8 +39,6 @@ router.get('/incidents', async (_req, res) => {
         });
     }
 });
-<<<<<<< HEAD
-=======
 // ── Fusion Log endpoints (inspection + feedback loop) ──
 /**
  * GET /api/fusion-log
@@ -92,6 +86,5 @@ router.patch('/fusion-log/:id/label', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
->>>>>>> c91130b (naveeth changes)
 exports.default = router;
 //# sourceMappingURL=incidents.js.map

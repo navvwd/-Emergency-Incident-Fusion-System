@@ -48,22 +48,15 @@ const sarvam = __importStar(require("../services/sarvam"));
 const moonshot = __importStar(require("../services/moonshot"));
 const embeddings = __importStar(require("../services/embeddings"));
 const dedup = __importStar(require("../services/dedup"));
-<<<<<<< HEAD
-=======
 const resilience_1 = require("../services/resilience");
 const logger_1 = require("../services/logger");
 const supabase_js_1 = require("@supabase/supabase-js");
 const supabase = (0, supabase_js_1.createClient)(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY);
->>>>>>> c91130b (naveeth changes)
 const upload = (0, multer_1.default)({
     storage: multer_1.default.memoryStorage(),
     limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
 });
 const router = (0, express_1.Router)();
-<<<<<<< HEAD
-router.post('/ingest-report', upload.single('file'), async (req, res) => {
-    const pipelineStart = Date.now();
-=======
 // ── Pipeline Constants ──────────────────────────
 const PIPELINE_TIMEOUT_MS = 30000; // 30s global (Sarvam APIs are slow)
 const OPTIONAL_CUTOFF_MS = 20000; // 20s — skip fusion/TTS after this
@@ -129,7 +122,6 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
             throw new PipelineTimeoutError(stage, elapsed);
         }
     }
->>>>>>> c91130b (naveeth changes)
     try {
         // ── 1. Extract inputs ──────────────────────
         const report_type = req.body.report_type;
@@ -161,10 +153,7 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
         console.log(`\n${'═'.repeat(60)}`);
         console.log(`[Pipeline] Ingesting ${report_type} report...`);
         console.log(`${'═'.repeat(60)}`);
-<<<<<<< HEAD
-=======
         stageStart = Date.now();
->>>>>>> c91130b (naveeth changes)
         let processedText;
         let sourceLanguage;
         let rawContent = text_content || null;
@@ -173,19 +162,12 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
         switch (report_type) {
             // ── VOICE ────────────────────────────────
             case 'voice': {
-<<<<<<< HEAD
-                console.log('[Pipeline] → Voice path: STT (translate mode)');
-                const sttResult = await sarvam.speechToText(file.buffer, file.originalname);
-                processedText = sttResult.transcript;
-                sourceLanguage = sttResult.language_code;
-=======
                 console.log('[Pipeline] → Voice path: Unified STT v3');
                 const sttResult = await sarvam.speechToText(file.buffer, file.originalname);
                 timings.stt_ms = Date.now() - stageStart;
                 sourceLanguage = sttResult.language_code;
                 // Use translated text for English processing, fall back to original
                 processedText = sttResult.translatedText || sttResult.transcript;
->>>>>>> c91130b (naveeth changes)
                 rawContent = sttResult.transcript;
                 break;
             }
@@ -219,14 +201,6 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
             }
             // ── IMAGE ────────────────────────────────
             case 'image': {
-<<<<<<< HEAD
-                console.log('[Pipeline] → Image path: Sarvam Vision + Moonshot Vision (parallel)');
-                const [visionText, sceneDesc] = await Promise.all([
-                    sarvam.extractImage(file.buffer, file.originalname),
-                    moonshot.describeScene(file.buffer),
-                ]);
-                processedText = `Signage/Text in image: ${visionText}. Scene description: ${sceneDesc}`;
-=======
                 console.log('[Pipeline] → Image path: Dual Vision (Sarvam + Moonshot)');
                 const results = await Promise.allSettled([
                     (0, resilience_1.withRetry)(() => sarvam.extractImage(file.buffer, file.originalname), 'sarvam-vision', 1),
@@ -258,7 +232,6 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
                     return;
                 }
                 processedText = descriptions.join('. ');
->>>>>>> c91130b (naveeth changes)
                 sourceLanguage = 'en-IN';
                 rawContent = processedText;
                 break;
@@ -269,41 +242,14 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
         }
         console.log(`[Pipeline] Processed text (${processedText.length} chars): "${processedText.substring(0, 120)}..."`);
         // ── 3. Entity extraction via Sarvam-30B ────
-<<<<<<< HEAD
-=======
         stageStart = Date.now();
         checkDeadline('extraction');
->>>>>>> c91130b (naveeth changes)
         const extracted = extractedOverride
             ? extractedOverride
             : await (async () => {
                 console.log('[Pipeline] → Extracting entities via Sarvam-30B...');
                 return sarvam.chatCompletion(processedText, report_type);
             })();
-<<<<<<< HEAD
-        // ── 4. Generate embedding for dedup ────────
-        console.log('[Pipeline] → Generating embedding...');
-        const embedding = await embeddings.generateEmbedding(extracted.summary);
-        // ── 5. Deduplication ───────────────────────
-        console.log('[Pipeline] → Searching for duplicate incidents...');
-        const match = await dedup.findMatch(embedding);
-        let incidentId;
-        let isMerged;
-        if (match) {
-            console.log(`[Pipeline] ✓ MERGED into existing incident ${match.incident_id} (similarity=${match.similarity.toFixed(3)})`);
-            await dedup.mergeReport(match.incident_id, extracted);
-            incidentId = match.incident_id;
-            isMerged = true;
-        }
-        else {
-            console.log('[Pipeline] ✓ NEW incident created');
-            incidentId = await dedup.createIncident(extracted);
-            isMerged = false;
-        }
-        // ── 6. Store raw report ────────────────────
-        const processingTime = Date.now() - pipelineStart;
-        await dedup.storeRawReport({
-=======
         timings.extraction_ms = Date.now() - stageStart;
         // ── 4. Generate embedding for dedup ────────
         stageStart = Date.now();
@@ -389,7 +335,6 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
         const processingTime = Date.now() - pipelineStart;
         timings.total_ms = processingTime;
         const reportId = await dedup.storeRawReport({
->>>>>>> c91130b (naveeth changes)
             report_type,
             raw_content: rawContent,
             file_url: null,
@@ -398,13 +343,6 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
             incident_id: incidentId,
             source_language: sourceLanguage,
             processing_time_ms: processingTime,
-<<<<<<< HEAD
-        });
-        // ── 7. Fire-and-forget TTS for critical ────
-        if (extracted.severity_score >= 8) {
-            console.log(`[Pipeline] ⚠ Severity ${extracted.severity_score} >= 8 — generating voice alert`);
-            console.log('[Pipeline] Voice alert generation is disabled.');
-=======
             dedup_status: dedupStatus,
         });
         // ── 6b. Store fusion log for explainability ─
@@ -424,7 +362,6 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
             }).catch((err) => {
                 console.error(`[Pipeline] TTS generation failed (non-fatal): ${err.message}`);
             });
->>>>>>> c91130b (naveeth changes)
         }
         // ── 8. Return response ─────────────────────
         const response = {
@@ -434,13 +371,10 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
             extracted,
             source_language: sourceLanguage,
             processing_time_ms: processingTime,
-<<<<<<< HEAD
-=======
             fusion_score: fusionScore,
             score_breakdown: scoreBreakdown,
             timings,
             dedup_status: dedupStatus,
->>>>>>> c91130b (naveeth changes)
         };
         console.log(`[Pipeline] ✅ Done in ${processingTime}ms | incident=${incidentId} merged=${isMerged}`);
         console.log(`${'═'.repeat(60)}\n`);
@@ -448,24 +382,6 @@ router.post('/ingest-report', upload.single('file'), async (req, res) => {
     }
     catch (error) {
         const elapsed = Date.now() - pipelineStart;
-<<<<<<< HEAD
-        console.error(`[Pipeline] ❌ Failed after ${elapsed}ms: ${error.message}`);
-        console.error(error.stack);
-        res.status(500).json({
-            success: false,
-            error: 'Report processing failed',
-            message: error.message,
-            processing_time_ms: elapsed,
-        });
-    }
-});
-function buildAutoDispatchExtractedData(text) {
-    const locationMatch = text.match(/Location:\s*([^.]*)/i);
-    const severityMatch = text.match(/Severity:\s*([^.]*)/i);
-    const summaryMatch = text.match(/Summary:\s*(.*)$/i);
-    const incidentTypeMatch = text.match(/\[AUTO-DISPATCH\]\s*([a-z_]+)/i);
-    const peopleMatch = text.match(/People affected:\s*([^.]*)/i);
-=======
         if (error instanceof PipelineTimeoutError) {
             (0, logger_1.logCritical)('PIPELINE_TIMEOUT', {
                 stage: error.stage,
@@ -498,27 +414,18 @@ function buildAutoDispatchExtractedData(text) {
     const summaryMatch = text.match(/Summary:\s*(.*)$/i);
     const incidentTypeMatch = text.match(/\[AUTO-DISPATCH\]\s*([a-z_]+)/i);
     const peopleMatch = text.match(/People affected:\s*(.+?)(?:\.\s*(?:Summary|Severity|Location)|$)/i);
->>>>>>> c91130b (naveeth changes)
     const location = locationMatch?.[1]?.trim() || 'Unknown';
     const [latRaw, lngRaw] = location.split(',').map((value) => value.trim());
     const latitude = Number.isFinite(Number(latRaw)) ? Number(latRaw) : null;
     const longitude = Number.isFinite(Number(lngRaw)) ? Number(lngRaw) : null;
     const severityText = (severityMatch?.[1] || '').toLowerCase();
-<<<<<<< HEAD
-    const affectedCount = Number.parseInt(peopleMatch?.[1] || '0', 10);
-=======
     const affectedCount = Number.parseInt(peopleMatch?.[1] || '1', 10);
->>>>>>> c91130b (naveeth changes)
     return {
         location,
         latitude,
         longitude,
         incident_type: normalizeIncidentType(incidentTypeMatch?.[1]),
-<<<<<<< HEAD
-        affected_count: Number.isFinite(affectedCount) ? affectedCount : 0,
-=======
         affected_count: Number.isFinite(affectedCount) ? Math.max(1, affectedCount) : 1,
->>>>>>> c91130b (naveeth changes)
         severity_score: severityText.includes('critical')
             ? 9
             : severityText.includes('high')

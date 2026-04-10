@@ -7,19 +7,6 @@
 
 import { ExtractedData, FusionCandidate, FusionScoreBreakdown, FusionCandidateRow } from '../types';
 
-<<<<<<< HEAD
-// ─── Constants ──────────────────────────────
-
-export const FUSION_WEIGHTS = {
-  semantic: 0.30,
-  geospatial: 0.25,
-  temporal: 0.20,
-  categorical: 0.15,
-  entity: 0.10,
-};
-
-export const FUSION_THRESHOLD = 0.72;
-=======
 // ─── Constants (configurable via env) ──────────────────────
 
 export const FUSION_WEIGHTS = {
@@ -37,7 +24,6 @@ const FUSION_GATES = {
   semantic:    parseFloat(process.env.FUSION_GATE_SEMANTIC || '0.40'),
   categorical: parseFloat(process.env.FUSION_GATE_CATEGORY || '0.50'),
 };
->>>>>>> c91130b (naveeth changes)
 
 const CATEGORY_SIMILARITY: Record<string, Record<string, number>> = {
   'road_accident':     { 'road_accident': 1.0, 'medical': 0.3 },
@@ -90,11 +76,7 @@ export function geoScore(lat1: number, lng1: number, lat2: number, lng2: number)
   return Math.exp(-distanceKm / DECAY_RATE);
 }
 
-<<<<<<< HEAD
-function normalizeLocation(loc: string): string {
-=======
 export function normalizeLocation(loc: string): string {
->>>>>>> c91130b (naveeth changes)
   return loc
     .toLowerCase()
     .replace(/\b(near|close to|beside|opposite|behind|next to|in front of)\b/g, '')
@@ -235,12 +217,6 @@ export function computeFusionScore(
     FUSION_WEIGHTS.categorical * categorical +
     FUSION_WEIGHTS.entity * entity;
 
-<<<<<<< HEAD
-  return {
-    incident_id: '', // filled by caller
-    score,
-    breakdown: { semantic, geospatial, temporal, categorical, entity },
-=======
   const breakdown = { semantic, geospatial, temporal, categorical, entity };
 
   // ── Hard gates: NEVER merge if critical dimensions are too low ──
@@ -263,7 +239,6 @@ export function computeFusionScore(
     incident_id: '', // filled by caller
     score: gatedScore,
     breakdown,
->>>>>>> c91130b (naveeth changes)
   };
 }
 

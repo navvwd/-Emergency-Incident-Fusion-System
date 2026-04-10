@@ -3,8 +3,6 @@
  * Returns a concise factual description of the emergency scene.
  */
 export declare function describeScene(imageBuffer: Buffer): Promise<string>;
-<<<<<<< HEAD
-=======
 export interface ChatCallbacks {
     onToken: (token: string) => void;
     onComplete: (text: string) => void;
@@ -18,5 +16,4 @@ export declare function streamChatCompletion(messages: Array<{
     role: string;
     content: string;
 }>, callbacks: ChatCallbacks, abortSignal?: AbortSignal): Promise<void>;
->>>>>>> c91130b (naveeth changes)
 //# sourceMappingURL=moonshot.d.ts.map

@@ -12,17 +12,13 @@ import {
   FusionCandidateRow,
   FusionScoreBreakdown,
   StoreRawReportParams,
+  DedupStatus,
 } from '../types';
 import {
   computeFusionScore,
   buildCandidateForScoring,
   recalculateSeverity,
   applyConfidenceEscalation,
-<<<<<<< HEAD
-  FUSION_THRESHOLD,
-} from './fusion';
-
-=======
   normalizeLocation,
   FUSION_THRESHOLD,
 } from './fusion';
@@ -47,7 +43,6 @@ function dedupeCandidates(candidates: FusionCandidateRow[]): FusionCandidateRow[
   return Array.from(seen.values());
 }
 
->>>>>>> c91130b (naveeth changes)
 // ─── 1. Find Fusion Candidates ──────────────
 
 /**
@@ -61,12 +56,8 @@ export async function findFusionCandidates(
   const start = Date.now();
 
   try {
-<<<<<<< HEAD
-    const { data, error } = await supabase.rpc('find_fusion_candidates', {
-=======
     // Try versioned function first
     const { data, error } = await supabase.rpc('find_fusion_candidates_v1', {
->>>>>>> c91130b (naveeth changes)
       query_embedding: JSON.stringify(embedding),
       semantic_threshold: 0.60,
       time_window_hours: 4,
@@ -74,23 +65,15 @@ export async function findFusionCandidates(
     });
 
     if (error) {
-<<<<<<< HEAD
-=======
       // Fallback: use original match_reports + manual incident join
       if (error.message.includes('find_fusion_candidates_v1')) {
-        throw new Error(
-          '[Fusion] RPC find_fusion_candidates_v1 not deployed. Run supabase/migrations/002_fusion_algorithm.sql before testing.'
-        );
+        throw new Error('[Fusion] RPC find_fusion_candidates_v1 not deployed. Run supabase/migrations/002_fusion_algorithm.sql before testing.');
       }
->>>>>>> c91130b (naveeth changes)
       throw new Error(error.message);
     }
 
     const elapsed = Date.now() - start;
-    console.log(
-      `[Fusion] Found ${data?.length ?? 0} candidates in ${elapsed}ms (threshold=0.60, window=4h)`
-    );
-
+    console.log(`[Fusion] Found ${data?.length ?? 0} candidates in ${elapsed}ms (threshold=0.60, window=4h)`);
     return (data ?? []) as FusionCandidateRow[];
   } catch (error: any) {
     const elapsed = Date.now() - start;
@@ -99,8 +82,6 @@ export async function findFusionCandidates(
   }
 }
 
-<<<<<<< HEAD
-=======
 /**
  * Fallback candidate retrieval using the original match_reports function.
  * Used when find_fusion_candidates_v1 hasn't been deployed yet.
@@ -156,7 +137,6 @@ async function findCandidatesFallback(
   });
 }
 
->>>>>>> c91130b (naveeth changes)
 // ─── 2. Find Best Match via Multi-Metric Fusion ─
 
 /**
@@ -173,23 +153,19 @@ export async function findBestMatch(
 ): Promise<FusionCandidate | null> {
   if (candidates.length === 0) return null;
 
-<<<<<<< HEAD
-=======
   candidates = dedupeCandidates(candidates);
-
->>>>>>> c91130b (naveeth changes)
   let bestMatch: FusionCandidate | null = null;
 
   for (const candidate of candidates) {
     // Use the semantic_similarity from pgvector as a proxy —
     // we don't have the candidate's raw embedding, so we build
     // a scoring object using the candidate row data directly.
-    // The semantic score comes from the DB query result.
     const candidateData = buildCandidateForScoring(candidate, []);
-
     const result = computeFusionScore(newReport, candidateData);
+
     // Override semantic score with the DB-computed value (more accurate)
     result.breakdown.semantic = candidate.semantic_similarity;
+
     // Recompute total with corrected semantic
     result.score =
       0.30 * result.breakdown.semantic +
@@ -197,6 +173,7 @@ export async function findBestMatch(
       0.20 * result.breakdown.temporal +
       0.15 * result.breakdown.categorical +
       0.10 * result.breakdown.entity;
+
     result.incident_id = candidate.incident_id;
 
     console.log(
@@ -214,8 +191,6 @@ export async function findBestMatch(
   }
 
   if (bestMatch) {
-<<<<<<< HEAD
-=======
     const { data: duplicates } = await supabase
       .from('incidents')
       .select('id, location')
@@ -233,7 +208,6 @@ export async function findBestMatch(
       );
     }
 
->>>>>>> c91130b (naveeth changes)
     console.log(
       `[Fusion] Best match: ${bestMatch.incident_id} (CFS=${bestMatch.score.toFixed(3)}) — MERGE`
     );
@@ -300,11 +274,7 @@ export async function mergeReport(
     // Recalculate severity using weighted average
     const newSeverity = recalculateSeverity(existingSeverity, existingReportCount, data.severity_score);
 
-<<<<<<< HEAD
-    const { error } = await supabase.rpc('merge_into_incident', {
-=======
     let { error } = await supabase.rpc('merge_into_incident_v2', {
->>>>>>> c91130b (naveeth changes)
       p_incident_id: incidentId,
       p_new_affected_count: data.affected_count,
       p_new_severity: newSeverity,
@@ -313,11 +283,9 @@ export async function mergeReport(
       p_new_summary: data.summary,
     });
 
-<<<<<<< HEAD
-=======
-    // Fallback: use original 3-param merge if v2 doesn't exist
+    // Graceful fallback: if v2 RPC doesn't exist, try v1
     if (error && error.message.includes('merge_into_incident_v2')) {
-      console.warn('[Fusion] v2 merge not found — falling back to original merge_into_incident');
+      console.warn('[Fusion] merge_into_incident_v2 not found — falling back to v1');
       const fallback = await supabase.rpc('merge_into_incident', {
         p_incident_id: incidentId,
         p_new_affected_count: data.affected_count,
@@ -326,7 +294,6 @@ export async function mergeReport(
       error = fallback.error;
     }
 
->>>>>>> c91130b (naveeth changes)
     if (error) {
       throw new Error(error.message);
     }
@@ -340,7 +307,7 @@ export async function mergeReport(
     if (reports && reports.length > 0) {
       const allSeverities = reports
         .map((r: any) => r.extracted_data?.severity_score)
-        .filter((s: any): s is number => typeof s === 'number');
+        .filter((s: any) => typeof s === 'number');
       allSeverities.push(data.severity_score);
 
       const escalated = applyConfidenceEscalation(newSeverity, existingReportCount + 1, allSeverities);
@@ -368,25 +335,6 @@ export async function storeRawReport(params: StoreRawReportParams): Promise<stri
   const start = Date.now();
 
   try {
-<<<<<<< HEAD
-    const { data, error } = await supabase
-      .from('raw_reports')
-      .insert({
-        report_type: params.report_type,
-        raw_content: params.raw_content,
-        file_url: params.file_url,
-        extracted_data: params.extracted_data,
-        embedding: JSON.stringify(params.embedding),
-        incident_id: params.incident_id,
-        source_language: params.source_language,
-        processing_time_ms: params.processing_time_ms,
-      })
-      .select('id')
-      .single();
-
-    if (error) {
-      throw new Error(error.message);
-=======
     const insertPayload: Record<string, any> = {
       report_type: params.report_type,
       raw_content: params.raw_content,
@@ -424,7 +372,6 @@ export async function storeRawReport(params: StoreRawReportParams): Promise<stri
 
     if (error || !data) {
       throw new Error(error?.message ?? 'No data returned');
->>>>>>> c91130b (naveeth changes)
     }
 
     const elapsed = Date.now() - start;
@@ -448,25 +395,16 @@ export async function storeFusionLog(
   fusionScore: number,
   scoreBreakdown: FusionScoreBreakdown,
   decision: 'merged' | 'new_incident',
-<<<<<<< HEAD
-): Promise<void> {
-  try {
-    const { error } = await supabase.from('fusion_log').insert({
-=======
   inputText?: string,
   embeddingHash?: string,
 ): Promise<void> {
   try {
     const fullPayload: Record<string, any> = {
->>>>>>> c91130b (naveeth changes)
       report_id: reportId,
       matched_incident_id: matchedIncidentId,
       fusion_score: fusionScore,
       score_breakdown: scoreBreakdown,
       decision,
-<<<<<<< HEAD
-    });
-=======
       input_text: inputText || null,
       embedding_hash: embeddingHash || null,
     };
@@ -486,7 +424,6 @@ export async function storeFusionLog(
       const retry = await supabase.from('fusion_log').insert(minPayload);
       error = retry.error;
     }
->>>>>>> c91130b (naveeth changes)
 
     if (error) {
       console.error(`[Fusion] Failed to store fusion log: ${error.message}`);

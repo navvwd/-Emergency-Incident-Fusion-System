@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"version":3,"file":"incidents.d.ts","sourceRoot":"","sources":["../../src/routes/incidents.ts"],"names":[],"mappings":"AASA,QAAA,MAAM,MAAM,4CAAW,CAAC;AA8BxB,eAAe,MAAM,CAAC"}
-=======
 {"version":3,"file":"incidents.d.ts","sourceRoot":"","sources":["../../src/routes/incidents.ts"],"names":[],"mappings":"AASA,QAAA,MAAM,MAAM,4CAAW,CAAC;AAwFxB,eAAe,MAAM,CAAC"}
->>>>>>> c91130b (naveeth changes)

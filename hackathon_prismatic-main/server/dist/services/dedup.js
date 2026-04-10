@@ -1,58 +1,5 @@
 "use strict";
 // ──────────────────────────────────────────────
-<<<<<<< HEAD
-// EIFS — Deduplication Service
-// Embedding-based incident matching, merging,
-// and raw report storage via Supabase
-// Ref: PROJECT.md Section 6
-// ──────────────────────────────────────────────
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.findMatch = findMatch;
-exports.createIncident = createIncident;
-exports.mergeReport = mergeReport;
-exports.storeRawReport = storeRawReport;
-const supabase_1 = require("../lib/supabase");
-// ─── 1. Find Matching Incident ───────────────
-/**
- * Searches existing reports for a cosine-similarity match above threshold.
- * Uses the `match_reports` RPC function (pgvector).
- * Returns the best match or null if no duplicates found.
- */
-async function findMatch(embedding) {
-    const start = Date.now();
-    try {
-        const { data, error } = await supabase_1.supabase.rpc('match_reports', {
-            query_embedding: JSON.stringify(embedding),
-            threshold: 0.85,
-            max_results: 1,
-        });
-        if (error) {
-            throw new Error(error.message);
-        }
-        const elapsed = Date.now() - start;
-        if (data && data.length > 0) {
-            const match = {
-                incident_id: data[0].incident_id,
-                similarity: data[0].similarity,
-            };
-            console.log(`[Dedup] Match found in ${elapsed}ms | incident=${match.incident_id} similarity=${match.similarity.toFixed(3)}`);
-            return match;
-        }
-        console.log(`[Dedup] No match found in ${elapsed}ms (threshold=0.85)`);
-        return null;
-    }
-    catch (error) {
-        const elapsed = Date.now() - start;
-        console.error(`[Dedup] findMatch failed after ${elapsed}ms: ${error.message}`);
-        throw new Error(`[Dedup] Similarity search failed: ${error.message}`);
-    }
-}
-// ─── 2. Create New Incident ──────────────────
-/**
- * Inserts a new incident into the incidents table.
- * Returns the UUID of the newly created incident.
- */
-=======
 // EIFS — Deduplication Service (Fusion v2)
 // Multi-metric fusion matching, merging,
 // and raw report storage via Supabase
@@ -224,7 +171,6 @@ async function findBestMatch(newReport, candidates) {
     return bestMatch;
 }
 // ─── 3. Create New Incident ──────────────────
->>>>>>> c91130b (naveeth changes)
 async function createIncident(data) {
     const start = Date.now();
     try {
@@ -247,55 +193,11 @@ async function createIncident(data) {
             throw new Error(error.message);
         }
         const elapsed = Date.now() - start;
-<<<<<<< HEAD
-        console.log(`[Dedup] New incident created in ${elapsed}ms | id=${inserted.id} type=${data.incident_type} severity=${data.severity_score}`);
-=======
         console.log(`[Fusion] New incident created in ${elapsed}ms | id=${inserted.id} type=${data.incident_type} severity=${data.severity_score}`);
->>>>>>> c91130b (naveeth changes)
         return inserted.id;
     }
     catch (error) {
         const elapsed = Date.now() - start;
-<<<<<<< HEAD
-        console.error(`[Dedup] createIncident failed after ${elapsed}ms: ${error.message}`);
-        throw new Error(`[Dedup] Failed to create incident: ${error.message}`);
-    }
-}
-// ─── 3. Merge Into Existing Incident ─────────
-/**
- * Calls the `merge_into_incident` RPC function to bump report_count,
- * take the max of affected_count and severity_score, and touch updated_at.
- */
-async function mergeReport(incidentId, data) {
-    const start = Date.now();
-    try {
-        const { error } = await supabase_1.supabase.rpc('merge_into_incident', {
-            p_incident_id: incidentId,
-            p_new_affected_count: data.affected_count,
-            p_new_severity: data.severity_score,
-        });
-        if (error) {
-            throw new Error(error.message);
-        }
-        const elapsed = Date.now() - start;
-        console.log(`[Dedup] Merged into incident ${incidentId} in ${elapsed}ms`);
-    }
-    catch (error) {
-        const elapsed = Date.now() - start;
-        console.error(`[Dedup] mergeReport failed after ${elapsed}ms: ${error.message}`);
-        throw new Error(`[Dedup] Failed to merge report into incident: ${error.message}`);
-    }
-}
-// ─── 4. Store Raw Report ─────────────────────
-/**
- * Inserts the raw report record with its embedding vector,
- * extracted data, and link to the parent incident.
- */
-async function storeRawReport(params) {
-    const start = Date.now();
-    try {
-        const { error } = await supabase_1.supabase.from('raw_reports').insert({
-=======
         console.error(`[Fusion] createIncident failed after ${elapsed}ms: ${error.message}`);
         throw new Error(`[Fusion] Failed to create incident: ${error.message}`);
     }
@@ -363,7 +265,6 @@ async function storeRawReport(params) {
     const start = Date.now();
     try {
         const insertPayload = {
->>>>>>> c91130b (naveeth changes)
             report_type: params.report_type,
             raw_content: params.raw_content,
             file_url: params.file_url,
@@ -372,19 +273,6 @@ async function storeRawReport(params) {
             incident_id: params.incident_id,
             source_language: params.source_language,
             processing_time_ms: params.processing_time_ms,
-<<<<<<< HEAD
-        });
-        if (error) {
-            throw new Error(error.message);
-        }
-        const elapsed = Date.now() - start;
-        console.log(`[Dedup] Raw report stored in ${elapsed}ms | type=${params.report_type} incident=${params.incident_id}`);
-    }
-    catch (error) {
-        const elapsed = Date.now() - start;
-        console.error(`[Dedup] storeRawReport failed after ${elapsed}ms: ${error.message}`);
-        throw new Error(`[Dedup] Failed to store raw report: ${error.message}`);
-=======
         };
         // Try with dedup_status, fall back without if column doesn't exist
         if (params.dedup_status) {
@@ -453,7 +341,6 @@ async function storeFusionLog(reportId, matchedIncidentId, fusionScore, scoreBre
     }
     catch (error) {
         console.error(`[Fusion] storeFusionLog error: ${error.message}`);
->>>>>>> c91130b (naveeth changes)
     }
 }
 //# sourceMappingURL=dedup.js.map

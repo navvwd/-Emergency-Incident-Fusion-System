@@ -12,17 +12,6 @@ const MOONSHOT_API_URL = 'https://api.moonshot.cn/v1/chat/completions';
 const MOONSHOT_VISION_MODEL = 'moonshot-v1-8k-vision-preview';
 const MOONSHOT_CHAT_MODEL = 'moonshot-v1-8k'; // Standard chat model for text
 
-<<<<<<< HEAD
-// Vision prompt from PROJECT.md Section 9
-const VISION_PROMPT = `You are analyzing an emergency report image. Describe what you see in terms of:
-1. What type of incident is shown (accident, fire, flood, etc.)
-2. Visible damage or injuries
-3. Location clues (street signs, landmarks, building names)
-4. Estimated number of people affected
-5. Any vehicles, equipment, or infrastructure involved
-
-Be factual and concise. 2-3 sentences max.`;
-=======
 // Vision prompt — optimized for emergency scene + location extraction
 const VISION_PROMPT = `Analyze this emergency image. Focus on:
 
@@ -39,7 +28,6 @@ const VISION_PROMPT = `Analyze this emergency image. Focus on:
 5. Vehicles, equipment, or infrastructure involved
 
 Be factual and concise. 2-3 sentences. Prioritize location clues — mention every sign, name, or landmark you can read.`;
->>>>>>> c91130b (naveeth changes)
 
 /**
  * Sends an image to Moonshot Kimi Vision for scene understanding.

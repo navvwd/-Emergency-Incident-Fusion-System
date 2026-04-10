@@ -117,11 +117,7 @@ function BreathingWidget() {
       <div className="bg-[var(--surface-container-highest)]/40 border border-[var(--outline-variant)]/10 rounded-2xl p-8 backdrop-blur-xl flex flex-col items-center text-center relative overflow-hidden group">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--primary)]/5 to-transparent pointer-events-none" />
         <span className="text-[10px] font-headline font-bold uppercase tracking-[0.3em] text-[var(--on-surface-variant)]/60 mb-6">
-<<<<<<< HEAD
-          Tactical Composure Protocol
-=======
           Breathe with me
->>>>>>> c91130b (naveeth changes)
         </span>
         <div className="relative w-32 h-32 mb-8">
           <div className="absolute inset-0 border-2 border-[var(--primary)]/20 rounded-full" />
@@ -139,11 +135,7 @@ function BreathingWidget() {
         </div>
         <h3 className="font-headline text-xl text-[var(--primary)] mb-2">Calm Breathing</h3>
         <p className="text-xs text-[var(--on-surface-variant)] max-w-[240px] leading-relaxed">
-<<<<<<< HEAD
-          Follow the ring to stabilize your heart rate while I process your request.
-=======
           Match your breathing to the ring. You're going to be okay.
->>>>>>> c91130b (naveeth changes)
         </p>
       </div>
     </div>
@@ -156,13 +148,8 @@ function TopNav({ onClose, onStartLiveVoice }: { onClose: () => void; onStartLiv
   return (
     <header className="flex justify-between items-center w-full px-4 sm:px-6 py-4 bg-[#10141a] z-10 border-b border-[#31353c]/30">
       <div className="flex items-center gap-3">
-<<<<<<< HEAD
-        <Icon name="smart_toy" className="text-xl text-[var(--primary)]" />
-        <span className="text-lg font-bold tracking-tighter text-[#adc6ff] font-headline">AI Assistant</span>
-=======
         <Icon name="support_agent" className="text-xl text-[var(--primary)]" />
         <span className="text-lg font-bold tracking-tighter text-[#adc6ff] font-headline">Emergency Response</span>
->>>>>>> c91130b (naveeth changes)
       </div>
       <div className="flex items-center gap-2 text-[#adc6ff]">
         {onStartLiveVoice && (
@@ -473,17 +460,10 @@ export default function LiveAgent({ isOpen, onClose, onStartLiveVoice }: LiveAge
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-2 h-2 bg-[var(--primary)] rounded-full animate-pulse" />
                     <span className="text-[10px] font-headline font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
-<<<<<<< HEAD
-                      SENTINEL-AI
-                    </span>
-                    <span className="text-[9px] font-mono text-[var(--outline)] uppercase ml-4">
-                      TIMESTAMP: {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} UTC
-=======
                       Responder
                     </span>
                     <span className="text-[9px] text-[var(--outline)] ml-4">
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
->>>>>>> c91130b (naveeth changes)
                     </span>
                   </div>
                 )}
@@ -496,14 +476,6 @@ export default function LiveAgent({ isOpen, onClose, onStartLiveVoice }: LiveAge
                     }
                   `}
                 >
-<<<<<<< HEAD
-                  {index === 0 && message.role === 'agent' && (
-                    <p className="font-headline text-lg leading-relaxed mb-4">
-                      Hello. I am your <span className="text-[var(--primary)] font-bold">Emergency Response Assistant</span>.
-                    </p>
-                  )}
-=======
->>>>>>> c91130b (naveeth changes)
                   <p className={`leading-relaxed ${message.role === 'agent' ? 'text-[var(--on-surface-variant)]' : ''}`}>
                     {message.content}
                   </p>

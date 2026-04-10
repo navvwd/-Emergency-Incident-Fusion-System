@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":"AAWA,QAAA,MAAM,GAAG,6CAAY,CAAC;AA2CtB,eAAe,GAAG,CAAC"}
-=======
 {"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":"AAcA,QAAA,MAAM,GAAG,6CAAY,CAAC;AAoDtB,eAAe,GAAG,CAAC"}
->>>>>>> c91130b (naveeth changes)

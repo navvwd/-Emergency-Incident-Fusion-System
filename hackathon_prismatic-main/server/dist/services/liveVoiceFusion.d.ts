@@ -29,13 +29,9 @@ export interface FusionSession {
     isHandlingAudioEnd: boolean;
     streamingTranscriptReceived: boolean;
     silenceTimer?: NodeJS.Timeout;
-<<<<<<< HEAD
-    currentChatSignal?: AbortController;
-=======
     accumulateTimer?: NodeJS.Timeout;
     accumulatedTranscripts: string[];
     currentChatAbort?: AbortController;
->>>>>>> c91130b (naveeth changes)
     sttStream?: sarvam.SarvamStreamingSTT;
     partialTranscript: string;
     createdAt: Date;

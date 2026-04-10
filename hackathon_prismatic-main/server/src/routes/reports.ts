@@ -7,12 +7,6 @@
 
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
-<<<<<<< HEAD
-import * as sarvam from '../services/sarvam';
-import * as embeddings from '../services/embeddings';
-import * as dedup from '../services/dedup';
-import { ReportType, ExtractedData, IngestReportResponseWithFusion, FusionScoreBreakdown } from '../types';
-=======
 import exifr from 'exifr';
 import * as sarvam from '../services/sarvam';
 import * as moonshot from '../services/moonshot';
@@ -27,7 +21,6 @@ const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY!,
 );
->>>>>>> c91130b (naveeth changes)
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -36,16 +29,18 @@ const upload = multer({
 
 const router = Router();
 
-<<<<<<< HEAD
-=======
 // ── Pipeline Constants ──────────────────────────
-const PIPELINE_TIMEOUT_MS = 30000;   // 30s global (Sarvam APIs are slow)
-const OPTIONAL_CUTOFF_MS = 20000;    // 20s — skip fusion/TTS after this
+const PIPELINE_TIMEOUT_MS = 30000; // 30s global (Sarvam APIs are slow)
+const OPTIONAL_CUTOFF_MS = 20000;  // 20s — skip fusion/TTS after this
 
 // ── Pipeline Timeout Error ──────────────────────
 class PipelineTimeoutError extends Error {
-  constructor(public stage: string, public elapsed: number) {
+  stage: string;
+  elapsed: number;
+  constructor(stage: string, elapsed: number) {
     super(`Pipeline timeout at ${stage} after ${elapsed}ms`);
+    this.stage = stage;
+    this.elapsed = elapsed;
   }
 }
 
@@ -55,10 +50,9 @@ const fusionHealth = {
   lastReset: Date.now(),
   disabled: false,
 };
-
 const FUSION_ERROR_THRESHOLD = 3;
-const FUSION_RESET_WINDOW = 5 * 60_000;    // 5 minutes
-const FUSION_DISABLE_DURATION = 2 * 60_000; // 2 minutes
+const FUSION_RESET_WINDOW = 5 * 60000;     // 5 minutes
+const FUSION_DISABLE_DURATION = 2 * 60000;  // 2 minutes
 
 function isFusionHealthy(): boolean {
   if (Date.now() - fusionHealth.lastReset > FUSION_RESET_WINDOW) {
@@ -95,15 +89,12 @@ function shouldRunStage(stage: 'required' | 'optional', pipelineStart: number): 
   return true;
 }
 
->>>>>>> c91130b (naveeth changes)
 router.post(
   '/ingest-report',
   upload.single('file'),
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: Request, res: Response) => {
     const pipelineStart = Date.now();
 
-<<<<<<< HEAD
-=======
     // ── Pipeline timing + state tracking ──
     const timings: PipelineTimings = { total_ms: 0 };
     let stageStart = Date.now();
@@ -116,7 +107,6 @@ router.post(
       }
     }
 
->>>>>>> c91130b (naveeth changes)
     try {
       // ── 1. Extract inputs ──────────────────────
       const report_type = req.body.report_type as ReportType;
@@ -153,33 +143,22 @@ router.post(
       console.log(`[Pipeline] Ingesting ${report_type} report...`);
       console.log(`${'═'.repeat(60)}`);
 
-<<<<<<< HEAD
-=======
       stageStart = Date.now();
->>>>>>> c91130b (naveeth changes)
       let processedText: string;
       let sourceLanguage: string;
       let rawContent: string | null = text_content || null;
       let extractedOverride: ExtractedData | null = null;
 
       // ── 2. Branch by report_type ───────────────
-
       switch (report_type) {
         // ── VOICE ────────────────────────────────
         case 'voice': {
-<<<<<<< HEAD
-          console.log('[Pipeline] → Voice path: STT (translate mode)');
-          const sttResult = await sarvam.speechToText(file!.buffer, file!.originalname);
-          processedText = sttResult.transcript;
-          sourceLanguage = sttResult.language_code;
-=======
           console.log('[Pipeline] → Voice path: Unified STT v3');
           const sttResult = await sarvam.speechToText(file!.buffer, file!.originalname);
           timings.stt_ms = Date.now() - stageStart;
           sourceLanguage = sttResult.language_code;
           // Use translated text for English processing, fall back to original
           processedText = sttResult.translatedText || sttResult.transcript;
->>>>>>> c91130b (naveeth changes)
           rawContent = sttResult.transcript;
           break;
         }
@@ -187,7 +166,7 @@ router.post(
         // ── TEXT ─────────────────────────────────
         case 'text': {
           console.log('[Pipeline] → Text path: LID + translate if needed');
-          
+
           if (text_content?.startsWith('[AUTO-DISPATCH]')) {
             console.log('[Pipeline]   Auto-dispatch fast path: skipping LID/translation/extraction');
             processedText = text_content;
@@ -216,14 +195,6 @@ router.post(
 
         // ── IMAGE ────────────────────────────────
         case 'image': {
-<<<<<<< HEAD
-          console.log('[Pipeline] → Image path: Sarvam Vision');
-          const visionText = await sarvam.extractImage(file!.buffer, file!.originalname);
-
-          processedText = `Scene description and text from image: ${visionText}`;
-          sourceLanguage = 'en-IN';
-          rawContent = processedText;
-=======
           console.log('[Pipeline] → Image path: EXIF extraction + Dual Vision (Sarvam + Moonshot)');
 
           // ── Extract EXIF metadata (GPS, camera info, date) ──
@@ -335,7 +306,6 @@ router.post(
             }
           }
 
->>>>>>> c91130b (naveeth changes)
           break;
         }
 
@@ -347,65 +317,14 @@ router.post(
       console.log(`[Pipeline] Processed text (${processedText.length} chars): "${processedText.substring(0, 120)}..."`);
 
       // ── 3. Entity extraction via Sarvam-30B ────
-<<<<<<< HEAD
-=======
       stageStart = Date.now();
       checkDeadline('extraction');
->>>>>>> c91130b (naveeth changes)
       const extracted: ExtractedData = extractedOverride
         ? extractedOverride
         : await (async () => {
             console.log('[Pipeline] → Extracting entities via Sarvam-30B...');
             return sarvam.chatCompletion(processedText, report_type);
           })();
-<<<<<<< HEAD
-
-      // ── 4. Generate embedding for dedup ────────
-      console.log('[Pipeline] → Generating embedding...');
-      const embedding = await embeddings.generateEmbedding(extracted.summary);
-
-      // ── 5. Multi-Metric Fusion Deduplication ───
-      console.log('[Pipeline] → Searching for fusion candidates...');
-      const candidates = await dedup.findFusionCandidates(embedding);
-
-      let incidentId: string;
-      let isMerged: boolean;
-      let fusionScore: number | null = null;
-      let scoreBreakdown: FusionScoreBreakdown | null = null;
-
-      const newReportData = {
-        extracted,
-        embedding,
-        created_at: new Date(),
-      };
-
-      const bestMatch = await dedup.findBestMatch(newReportData, candidates);
-
-      if (bestMatch) {
-        // Find the matching candidate row for severity/report_count
-        const matchedCandidate = candidates.find((c) => c.incident_id === bestMatch.incident_id)!;
-        console.log(
-          `[Pipeline] ✓ MERGED into incident ${bestMatch.incident_id} (CFS=${bestMatch.score.toFixed(3)})`
-        );
-        await dedup.mergeReport(
-          bestMatch.incident_id,
-          extracted,
-          matchedCandidate.severity_score,
-          matchedCandidate.report_count,
-        );
-        incidentId = bestMatch.incident_id;
-        isMerged = true;
-        fusionScore = bestMatch.score;
-        scoreBreakdown = bestMatch.breakdown;
-      } else {
-        console.log('[Pipeline] ✓ NEW incident created');
-        incidentId = await dedup.createIncident(extracted);
-        isMerged = false;
-      }
-
-      // ── 6. Store raw report ────────────────────
-      const processingTime = Date.now() - pipelineStart;
-=======
       timings.extraction_ms = Date.now() - stageStart;
 
       // ── 3b. Override with device GPS if provided ──
@@ -508,7 +427,6 @@ router.post(
       // ── 6. Store raw report ────────────────────
       const processingTime = Date.now() - pipelineStart;
       timings.total_ms = processingTime;
->>>>>>> c91130b (naveeth changes)
 
       const reportId = await dedup.storeRawReport({
         report_type,
@@ -519,10 +437,7 @@ router.post(
         incident_id: incidentId,
         source_language: sourceLanguage,
         processing_time_ms: processingTime,
-<<<<<<< HEAD
-=======
         dedup_status: dedupStatus,
->>>>>>> c91130b (naveeth changes)
       });
 
       // ── 6b. Store fusion log for explainability ─
@@ -532,14 +447,6 @@ router.post(
         fusionScore ?? 0,
         scoreBreakdown ?? { semantic: 0, geospatial: 0, temporal: 0, categorical: 0, entity: 0 },
         isMerged ? 'merged' : 'new_incident',
-<<<<<<< HEAD
-      );
-
-      // ── 7. Fire-and-forget TTS for critical ────
-      if (extracted.severity_score >= 8) {
-        console.log(`[Pipeline] ⚠ Severity ${extracted.severity_score} >= 8 — generating voice alert`);
-        console.log('[Pipeline] Voice alert generation is disabled.');
-=======
         processedText,
         embedding.slice(0, 8).map(v => v.toFixed(4)).join(','),
       );
@@ -557,7 +464,6 @@ router.post(
         }).catch((err) => {
           console.error(`[Pipeline] TTS generation failed (non-fatal): ${err.message}`);
         });
->>>>>>> c91130b (naveeth changes)
       }
 
       // ── 8. Return response ─────────────────────
@@ -570,30 +476,16 @@ router.post(
         processing_time_ms: processingTime,
         fusion_score: fusionScore,
         score_breakdown: scoreBreakdown,
-<<<<<<< HEAD
-=======
         timings,
         dedup_status: dedupStatus,
->>>>>>> c91130b (naveeth changes)
       };
 
       console.log(`[Pipeline] ✅ Done in ${processingTime}ms | incident=${incidentId} merged=${isMerged}`);
       console.log(`${'═'.repeat(60)}\n`);
-
       res.status(200).json(response);
+
     } catch (error: any) {
       const elapsed = Date.now() - pipelineStart;
-<<<<<<< HEAD
-      console.error(`[Pipeline] ❌ Failed after ${elapsed}ms: ${error.message}`);
-      console.error(error.stack);
-
-      res.status(500).json({
-        success: false,
-        error: 'Report processing failed',
-        message: error.message,
-        processing_time_ms: elapsed,
-      });
-=======
 
       if (error instanceof PipelineTimeoutError) {
         logCritical('PIPELINE_TIMEOUT', {
@@ -617,7 +509,6 @@ router.post(
           processing_time_ms: elapsed,
         });
       }
->>>>>>> c91130b (naveeth changes)
     }
   }
 );
@@ -635,22 +526,14 @@ function buildAutoDispatchExtractedData(text: string): ExtractedData {
   const latitude = Number.isFinite(Number(latRaw)) ? Number(latRaw) : null;
   const longitude = Number.isFinite(Number(lngRaw)) ? Number(lngRaw) : null;
   const severityText = (severityMatch?.[1] || '').toLowerCase();
-<<<<<<< HEAD
-  const affectedCount = Number.parseInt(peopleMatch?.[1] || '0', 10);
-=======
   const affectedCount = Number.parseInt(peopleMatch?.[1] || '1', 10);
->>>>>>> c91130b (naveeth changes)
 
   return {
     location,
     latitude,
     longitude,
     incident_type: normalizeIncidentType(incidentTypeMatch?.[1]),
-<<<<<<< HEAD
-    affected_count: Number.isFinite(affectedCount) ? affectedCount : 0,
-=======
     affected_count: Number.isFinite(affectedCount) ? Math.max(1, affectedCount) : 1,
->>>>>>> c91130b (naveeth changes)
     severity_score: severityText.includes('critical')
       ? 9
       : severityText.includes('high')

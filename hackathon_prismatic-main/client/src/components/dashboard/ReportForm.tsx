@@ -111,8 +111,6 @@ export default function ReportForm({ onSuccess }: ReportFormProps) {
       formData.append('file', file);
     }
 
-<<<<<<< HEAD
-=======
     // Attempt GPS capture (best-effort, 5s timeout)
     try {
       const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
@@ -128,7 +126,6 @@ export default function ReportForm({ onSuccess }: ReportFormProps) {
       // GPS unavailable — continue without it
     }
 
->>>>>>> c91130b (naveeth changes)
     try {
       const response = await api.post('/api/ingest-report', formData);
 

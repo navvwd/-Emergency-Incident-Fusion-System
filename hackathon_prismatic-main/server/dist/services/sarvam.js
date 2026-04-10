@@ -9,10 +9,7 @@ exports.detectLanguage = detectLanguage;
 exports.translate = translate;
 exports.extractImage = extractImage;
 exports.chatCompletion = chatCompletion;
-<<<<<<< HEAD
-=======
 exports.textToSpeech = textToSpeech;
->>>>>>> c91130b (naveeth changes)
 const axios_1 = __importDefault(require("axios"));
 const form_data_1 = __importDefault(require("form-data"));
 const SARVAM_BASE_URL = 'https://api.sarvam.ai';
@@ -50,11 +47,7 @@ Content: "${processedText}"
 
 Rules:
 - Location should include area name AND city
-<<<<<<< HEAD
-- affected_count should be 0 if not mentioned
-=======
 - affected_count should be 1 if not mentioned (at minimum, the reporter is affected)
->>>>>>> c91130b (naveeth changes)
 - severity_score is between 1 and 10
 
 Respond ONLY with valid JSON:
@@ -68,19 +61,6 @@ Respond ONLY with valid JSON:
   "summary": "one-line dedup-friendly summary under 100 chars"
 }`;
 }
-<<<<<<< HEAD
-async function speechToText(audioBuffer, fileName) {
-    const start = Date.now();
-    const client = getSarvamClient();
-    try {
-        const form = new form_data_1.default();
-        form.append('file', audioBuffer, {
-            filename: fileName,
-            contentType: 'audio/webm',
-        });
-        form.append('model', 'saaras:v2.5');
-        const response = await client.post('/speech-to-text-translate', form, {
-=======
 /**
  * Unified STT using Sarvam v3 /speech-to-text endpoint.
  * - English: 1 call (transcribe) → done
@@ -99,20 +79,10 @@ async function speechToText(audioBuffer, fileName) {
         form.append('model', 'saaras:v3');
         form.append('mode', 'transcribe');
         const response = await client.post('/speech-to-text', form, {
->>>>>>> c91130b (naveeth changes)
             headers: {
                 ...form.getHeaders(),
                 'api-subscription-key': process.env.SARVAM_API_KEY,
             },
-<<<<<<< HEAD
-        });
-        const elapsed = Date.now() - start;
-        console.log(`[Sarvam STT] Transcribed in ${elapsed}ms | lang=${response.data.language_code}`);
-        return {
-            transcript: response.data.transcript,
-            language_code: response.data.language_code,
-            language_confidence: response.data.language_confidence ?? response.data.language_probability ?? null,
-=======
             timeout: 8000,
         });
         let transcript = (response.data.transcript || '').trim();
@@ -165,7 +135,6 @@ async function speechToText(audioBuffer, fileName) {
             language_code: langCode,
             language_confidence: confidence,
             translatedText,
->>>>>>> c91130b (naveeth changes)
         };
     }
     catch (error) {
@@ -221,11 +190,7 @@ async function extractImage(imageBuffer, fileName) {
         const mimeType = fileName.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg';
         const client = getSarvamChatClient();
         const response = await client.post('/v1/chat/completions', {
-<<<<<<< HEAD
-            model: 'sarvam-30b',
-=======
             model: 'sarvam-105b',
->>>>>>> c91130b (naveeth changes)
             messages: [
                 {
                     role: 'system',
@@ -252,11 +217,7 @@ async function extractImage(imageBuffer, fileName) {
         const elapsed = Date.now() - start;
         const msg = error.response?.data?.message || error.response?.data?.error?.message || error.message;
         console.error(`[Sarvam Vision] Failed after ${elapsed}ms: ${msg}`);
-<<<<<<< HEAD
-        return '';
-=======
         throw new Error(`[Sarvam Vision] Image extraction failed: ${msg}`);
->>>>>>> c91130b (naveeth changes)
     }
 }
 async function chatCompletion(text, reportType) {
@@ -266,11 +227,7 @@ async function chatCompletion(text, reportType) {
     async function attempt(retryCount) {
         try {
             const response = await client.post('/v1/chat/completions', {
-<<<<<<< HEAD
-                model: 'sarvam-30b',
-=======
                 model: 'sarvam-105b',
->>>>>>> c91130b (naveeth changes)
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: text },
@@ -288,11 +245,7 @@ async function chatCompletion(text, reportType) {
                 throw new Error('Missing required fields in extracted data');
             }
             parsed.severity_score = Math.max(1, Math.min(10, parsed.severity_score));
-<<<<<<< HEAD
-            parsed.affected_count = Math.max(0, parsed.affected_count ?? 0);
-=======
             parsed.affected_count = Math.max(1, parsed.affected_count ?? 1);
->>>>>>> c91130b (naveeth changes)
             return parsed;
         }
         catch (error) {
@@ -316,8 +269,6 @@ async function chatCompletion(text, reportType) {
         throw new Error(`[Sarvam Chat] Entity extraction failed: ${msg}`);
     }
 }
-<<<<<<< HEAD
-=======
 /**
  * Text-to-Speech using Sarvam Bulbul v3.
  * Returns base64 data URL (data:audio/wav;base64,...)
@@ -357,5 +308,4 @@ async function textToSpeech(text, languageCode = 'en-IN', speaker = 'aditya') {
         throw new Error(`[Sarvam TTS] Text-to-speech failed: ${msg}`);
     }
 }
->>>>>>> c91130b (naveeth changes)
 //# sourceMappingURL=sarvam.js.map

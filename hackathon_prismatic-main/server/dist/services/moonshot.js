@@ -9,19 +9,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.describeScene = describeScene;
-<<<<<<< HEAD
-const axios_1 = __importDefault(require("axios"));
-// Using Kimi's API URL (OpenAI payload compatible for Chat Completions)
-const MOONSHOT_API_URL = 'https://api.moonshot.cn/v1/chat/completions';
-const MOONSHOT_MODEL = 'moonshot-v1-8k-vision-preview'; // Note: Adjust the model name based on your exact Moonshot tier
-=======
 exports.streamChatCompletion = streamChatCompletion;
 const axios_1 = __importDefault(require("axios"));
 // Using Kimi's API URL (OpenAI payload compatible for Chat Completions)
 const MOONSHOT_API_URL = 'https://api.moonshot.cn/v1/chat/completions';
 const MOONSHOT_VISION_MODEL = 'moonshot-v1-8k-vision-preview';
 const MOONSHOT_CHAT_MODEL = 'moonshot-v1-8k'; // Standard chat model for text
->>>>>>> c91130b (naveeth changes)
 // Vision prompt from PROJECT.md Section 9
 const VISION_PROMPT = `You are analyzing an emergency report image. Describe what you see in terms of:
 1. What type of incident is shown (accident, fire, flood, etc.)
@@ -45,11 +38,7 @@ async function describeScene(imageBuffer) {
         const base64Image = imageBuffer.toString('base64');
         const dataUrl = `data:image/jpeg;base64,${base64Image}`;
         const response = await axios_1.default.post(MOONSHOT_API_URL, {
-<<<<<<< HEAD
-            model: MOONSHOT_MODEL,
-=======
             model: MOONSHOT_VISION_MODEL,
->>>>>>> c91130b (naveeth changes)
             max_tokens: 300,
             messages: [
                 {
@@ -86,8 +75,6 @@ async function describeScene(imageBuffer) {
         throw new Error(`[Moonshot Vision] Scene description failed: ${msg}`);
     }
 }
-<<<<<<< HEAD
-=======
 /**
  * Streaming chat completion using Moonshot Kimi
  * Much better than Sarvam for natural conversation
@@ -171,5 +158,4 @@ async function streamChatCompletion(messages, callbacks, abortSignal) {
         throw new Error(`Chat streaming failed: ${msg}`);
     }
 }
->>>>>>> c91130b (naveeth changes)
 //# sourceMappingURL=moonshot.js.map

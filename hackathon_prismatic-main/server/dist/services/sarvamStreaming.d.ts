@@ -10,10 +10,6 @@ export declare class SarvamStreamingSTT {
     private callbacks;
     private targetLanguage;
     private isConnected;
-<<<<<<< HEAD
-    constructor(apiKey: string, callbacks: StreamingSTTCallbacks, targetLanguage?: string);
-    isReady(): boolean;
-=======
     private isClosed;
     private reconnectAttempts;
     private maxReconnectAttempts;
@@ -21,7 +17,6 @@ export declare class SarvamStreamingSTT {
     constructor(apiKey: string, callbacks: StreamingSTTCallbacks, targetLanguage?: string);
     isReady(): boolean;
     private scheduleReconnect;
->>>>>>> c91130b (naveeth changes)
     connect(): Promise<void>;
     private handleMessage;
     sendAudioChunk(audioChunk: Buffer): void;

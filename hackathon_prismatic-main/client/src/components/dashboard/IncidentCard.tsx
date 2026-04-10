@@ -6,11 +6,7 @@
 import {
   Car, Flame, Droplets, Building, HeartPulse,
   ShieldAlert, Construction, AlertCircle,
-<<<<<<< HEAD
-  MapPin, Users, FileText, Clock
-=======
   MapPin, Users, FileText, Clock, Volume2
->>>>>>> c91130b (naveeth changes)
 } from 'lucide-react';
 import type { Incident, IncidentType } from '../../lib/types';
 import { getSeverityColor, getSeverityLabel, INCIDENT_TYPE_LABELS } from '../../lib/constants';
@@ -152,29 +148,14 @@ export default function IncidentCard({ incident, compact = false }: IncidentCard
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* Location */}
-      <div className="flex items-start gap-2 mb-2 relative">
-        <MapPin size={14} className="text-[var(--text-secondary)] mt-0.5 flex-shrink-0" />
-        <p className="text-sm text-[var(--text-primary)] font-medium leading-snug line-clamp-1">
-=======
       {/* Location — LARGER for panic readability */}
       <div className="flex items-start gap-2 mb-2 relative">
         <MapPin size={16} className="mt-0.5 flex-shrink-0" style={{ color: severityColor }} />
         <p className="text-base font-semibold text-[var(--text-primary)] leading-snug line-clamp-2">
->>>>>>> c91130b (naveeth changes)
           {incident.location}
         </p>
       </div>
 
-<<<<<<< HEAD
-      {/* Summary */}
-      <p className="text-xs text-[var(--text-secondary)] mb-3 leading-relaxed line-clamp-2">
-        {incident.summary}
-      </p>
-
-      {/* Bottom stats row */}
-=======
       {/* Summary — bigger text, better line height */}
       <p className="text-sm text-[var(--text-secondary)] mb-3 leading-relaxed line-clamp-3">
         {incident.summary}
@@ -215,7 +196,6 @@ export default function IncidentCard({ incident, compact = false }: IncidentCard
       )}
 
       {/* Bottom stats row + fusion confidence */}
->>>>>>> c91130b (naveeth changes)
       <div className="flex items-center gap-4 text-[11px] text-[var(--text-tertiary)] pt-3 border-t border-[var(--border-subtle)] relative">
         <div className="flex items-center gap-1.5">
           <Users size={12} />
@@ -225,8 +205,6 @@ export default function IncidentCard({ incident, compact = false }: IncidentCard
           <FileText size={12} />
           <span>{incident.report_count} {incident.report_count === 1 ? 'report' : 'reports'}</span>
         </div>
-<<<<<<< HEAD
-=======
         {/* Fusion confidence indicator */}
         {incident.report_count >= 2 && (
           <span
@@ -243,7 +221,6 @@ export default function IncidentCard({ incident, compact = false }: IncidentCard
             {incident.report_count >= 3 ? 'Verified' : 'Corroborated'}
           </span>
         )}
->>>>>>> c91130b (naveeth changes)
         <div className="flex items-center gap-1.5 ml-auto">
           <Clock size={12} />
           <span>{timeAgo(incident.updated_at)}</span>

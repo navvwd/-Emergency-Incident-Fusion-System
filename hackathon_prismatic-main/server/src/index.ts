@@ -9,25 +9,13 @@ import incidentsRouter from './routes/incidents';
 import agentRouter from './routes/agent';
 import { setupLiveVoiceFusion } from './routes/liveVoiceFusion';
 
-<<<<<<< HEAD
-=======
 import { getHealthStatus } from './services/resilience';
 import { getRecentCriticalEvents } from './services/logger';
 
->>>>>>> c91130b (naveeth changes)
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = createServer(app);
 
-<<<<<<< HEAD
-app.use(cors());
-app.use(express.json());
-
-app.get('/health', (_req, res) => {
-  res.json({
-    status: 'ok',
-    service: 'eifs-server',
-=======
 app.use(cors({
   origin: [
     'http://localhost:5173',
@@ -48,7 +36,7 @@ app.use(express.json());
 app.get('/health', (_req, res) => {
   const services = getHealthStatus();
   const criticals = getRecentCriticalEvents();
-  const allHealthy = Object.values(services).every(s => s.healthy);
+  const allHealthy = Object.values(services).every((s: any) => s.healthy);
 
   res.status(criticals.length > 3 ? 503 : allHealthy ? 200 : 503).json({
     status: criticals.length > 3 ? 'degraded' : allHealthy ? 'healthy' : 'degraded',
@@ -57,7 +45,6 @@ app.get('/health', (_req, res) => {
     recent_critical_count: criticals.length,
     critical_events: criticals,
     uptime: process.uptime(),
->>>>>>> c91130b (naveeth changes)
     timestamp: new Date().toISOString(),
   });
 });
@@ -91,3 +78,4 @@ server.listen(Number(PORT), '0.0.0.0', () => {
 });
 
 export default app;
+

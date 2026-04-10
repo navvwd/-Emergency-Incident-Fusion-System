@@ -1,12 +1,9 @@
 "use strict";
-<<<<<<< HEAD
-=======
 // ──────────────────────────────────────────────
 // EIFS — Live Voice Data Fusion Service
 // Production-grade streaming STT + non-streaming
 // AI dispatcher with guaranteed response delivery
 // ──────────────────────────────────────────────
->>>>>>> c91130b (naveeth changes)
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -40,12 +37,9 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-<<<<<<< HEAD
-=======
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
->>>>>>> c91130b (naveeth changes)
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSession = createSession;
 exports.getSession = getSession;
@@ -56,9 +50,6 @@ exports.getSessionStats = getSessionStats;
 exports.handleMessage = handleMessage;
 const ws_1 = require("ws");
 const uuid_1 = require("uuid");
-<<<<<<< HEAD
-const sarvam = __importStar(require("./sarvamStreaming"));
-=======
 const axios_1 = __importDefault(require("axios"));
 const sarvam = __importStar(require("./sarvamStreaming"));
 // ─── Constants ──────────────────────────────
@@ -72,7 +63,6 @@ const MIN_AUDIO_BYTES = 8000;
 const SESSION_TTL_MS = 30 * 60 * 1000;
 const HISTORY_WINDOW = 8;
 // ─── First Aid Knowledge Base ───────────────
->>>>>>> c91130b (naveeth changes)
 const FIRST_AID_GUIDES = {
     road_accident: {
         steps: [
@@ -136,10 +126,7 @@ const EMERGENCY_NUMBERS = [
     { name: 'Fire', number: '101' },
     { name: 'Police', number: '100' },
 ];
-<<<<<<< HEAD
-=======
 // ─── Session Management ─────────────────────
->>>>>>> c91130b (naveeth changes)
 const sessions = new Map();
 function createSession(ws, languageCode = 'en-IN') {
     const session = {
@@ -154,10 +141,7 @@ function createSession(ws, languageCode = 'en-IN') {
         isRecording: false,
         isHandlingAudioEnd: false,
         streamingTranscriptReceived: false,
-<<<<<<< HEAD
-=======
         accumulatedTranscripts: [],
->>>>>>> c91130b (naveeth changes)
         partialTranscript: '',
         createdAt: new Date(),
         lastActivity: new Date(),
@@ -189,35 +173,20 @@ function getSessionStats() {
 function cleanupSession(session) {
     if (session.silenceTimer)
         clearTimeout(session.silenceTimer);
-<<<<<<< HEAD
-    if (session.currentChatSignal)
-        session.currentChatSignal.abort();
-=======
     if (session.accumulateTimer)
         clearTimeout(session.accumulateTimer);
     if (session.currentChatAbort)
         session.currentChatAbort.abort();
->>>>>>> c91130b (naveeth changes)
     if (session.sttStream)
         session.sttStream.close();
     session.isRecording = false;
     session.isHandlingAudioEnd = false;
     session.streamingTranscriptReceived = false;
-<<<<<<< HEAD
-=======
     session.accumulatedTranscripts = [];
->>>>>>> c91130b (naveeth changes)
 }
 function updateActivity(session) {
     session.lastActivity = new Date();
 }
-<<<<<<< HEAD
-function send(session, message) {
-    if (session.ws.readyState === ws_1.WebSocket.OPEN) {
-        session.ws.send(JSON.stringify(message));
-    }
-}
-=======
 // ─── Safe Message Sending ───────────────────
 /**
  * Validated send — guarantees no empty text messages are ever sent.
@@ -240,7 +209,6 @@ function send(session, message) {
     session.ws.send(JSON.stringify(message));
 }
 // ─── Message Router ─────────────────────────
->>>>>>> c91130b (naveeth changes)
 async function handleMessage(session, message) {
     const startTime = Date.now();
     try {
@@ -255,11 +223,7 @@ async function handleMessage(session, message) {
                 await handleAudioEnd(session);
                 break;
             case 'interrupt':
-<<<<<<< HEAD
-                await handleInterrupt(session);
-=======
                 handleInterrupt(session);
->>>>>>> c91130b (naveeth changes)
                 break;
             case 'geolocation':
                 handleGeolocation(session, message);
@@ -278,10 +242,7 @@ async function handleMessage(session, message) {
         console.log(`[Fusion] Message handled in ${elapsed}ms: ${message.type}`);
     }
 }
-<<<<<<< HEAD
-=======
 // ─── Session Start ──────────────────────────
->>>>>>> c91130b (naveeth changes)
 async function handleStart(session, language) {
     if (language) {
         session.languageCode = language;
@@ -291,16 +252,8 @@ async function handleStart(session, language) {
     session.isRecording = true;
     session.audioBuffer = [];
     session.partialTranscript = '';
-<<<<<<< HEAD
-    send(session, {
-        type: 'status',
-        status: 'Starting session...',
-        stage: 'greeting',
-    });
-=======
     send(session, { type: 'status', status: 'Starting session...', stage: 'greeting' });
     // Connect streaming STT
->>>>>>> c91130b (naveeth changes)
     try {
         const apiKey = process.env.SARVAM_API_KEY;
         if (!apiKey)
@@ -311,33 +264,6 @@ async function handleStart(session, language) {
                 if (text.trim()) {
                     session.streamingTranscriptReceived = true;
                 }
-<<<<<<< HEAD
-                send(session, {
-                    type: 'transcript',
-                    text,
-                    isFinal,
-                    language: lang,
-                });
-                if (isFinal) {
-                    if (session.silenceTimer)
-                        clearTimeout(session.silenceTimer);
-                    session.streamingTranscriptReceived = true;
-                    session.isRecording = false;
-                    session.audioBuffer = [];
-                    void handleFinalTranscript(session, text, lang);
-                }
-            },
-            onTranslation: (original, translated) => {
-                send(session, {
-                    type: 'translation',
-                    original,
-                    translated,
-                });
-                session.context.lastUserMessage = translated;
-            },
-            onError: (error) => {
-                console.error('[Fusion] STT error:', error);
-=======
                 send(session, { type: 'transcript', text, isFinal, language: lang });
                 if (isFinal && text.trim()) {
                     // Accumulate final transcript segments instead of processing immediately.
@@ -363,7 +289,6 @@ async function handleStart(session, language) {
             },
             onError: (error) => {
                 console.error('[Fusion] STT stream error:', error);
->>>>>>> c91130b (naveeth changes)
             },
             onConnected: () => {
                 console.log('[Fusion] Streaming STT connected');
@@ -372,22 +297,6 @@ async function handleStart(session, language) {
         await session.sttStream.connect();
     }
     catch (err) {
-<<<<<<< HEAD
-        console.warn('[Fusion] Streaming STT failed, will use batch mode:', err);
-    }
-    const greetings = {
-        'en-IN': "I'm here with you. Tell me what emergency is happening.",
-        'hi-IN': 'Main yahan hoon. Bataiye kya emergency ho rahi hai.',
-        'ta-IN': 'Naan ungaludan irukkiren. Enna avasara nilai nadakkirathu endru sollungal.',
-        'te-IN': 'Nenu meetho unnanu. Emi emergency jarugutundo cheppandi.',
-    };
-    const greeting = greetings[session.languageCode] || greetings['en-IN'];
-    session.history.push({
-        role: 'agent',
-        content: greeting,
-        timestamp: new Date(),
-    });
-=======
         const isNetworkError = err?.code === 'ENOTFOUND' || err?.message?.includes('ENOTFOUND');
         if (isNetworkError) {
             console.warn('[Fusion] Network unreachable, retrying STT connection in 3s...');
@@ -418,25 +327,14 @@ async function handleStart(session, language) {
     };
     const greeting = greetings[session.languageCode] || greetings['en-IN'];
     session.history.push({ role: 'agent', content: greeting, timestamp: new Date() });
->>>>>>> c91130b (naveeth changes)
     session.context.lastAgentResponse = greeting;
     send(session, { type: 'agent_response_start' });
     send(session, { type: 'agent_response_complete', text: greeting });
     session.stage = 'listening';
-<<<<<<< HEAD
-    send(session, {
-        type: 'status',
-        status: 'Listening...',
-        stage: 'listening',
-    });
-    updateActivity(session);
-}
-=======
     send(session, { type: 'status', status: 'Listening...', stage: 'listening' });
     updateActivity(session);
 }
 // ─── Audio Handling ─────────────────────────
->>>>>>> c91130b (naveeth changes)
 async function handleAudioChunk(session, base64Data) {
     if (!session.isRecording)
         return;
@@ -449,32 +347,11 @@ async function handleAudioChunk(session, base64Data) {
     if (session.sttStream?.isReady()) {
         session.sttStream.sendAudioChunk(chunk);
     }
-<<<<<<< HEAD
-=======
     // Reset silence timer — only trigger processing after sustained silence
->>>>>>> c91130b (naveeth changes)
     if (session.silenceTimer)
         clearTimeout(session.silenceTimer);
     session.silenceTimer = setTimeout(async () => {
         await handleAudioEnd(session);
-<<<<<<< HEAD
-    }, 500);
-    updateActivity(session);
-}
-async function handleAudioEnd(session) {
-    if (session.stage === 'processing') {
-        return;
-    }
-    if (session.isHandlingAudioEnd) {
-        return;
-    }
-    session.isHandlingAudioEnd = true;
-    try {
-        if (session.audioBuffer.length === 0) {
-            session.isRecording = true;
-            session.stage = 'listening';
-            send(session, { type: 'status', status: 'Listening...', stage: 'listening' });
-=======
     }, SILENCE_TIMEOUT_MS);
     updateActivity(session);
 }
@@ -487,32 +364,11 @@ async function handleAudioEnd(session) {
     try {
         if (session.audioBuffer.length === 0) {
             resumeListening(session);
->>>>>>> c91130b (naveeth changes)
             return;
         }
         session.isRecording = false;
         if (session.silenceTimer)
             clearTimeout(session.silenceTimer);
-<<<<<<< HEAD
-        if (session.sttStream?.isReady()) {
-            session.sttStream.flushAudio();
-            await sleep(50);
-            if (session.streamingTranscriptReceived && session.partialTranscript.trim()) {
-                const transcript = session.partialTranscript.trim();
-                send(session, {
-                    type: 'transcript',
-                    text: transcript,
-                    isFinal: true,
-                    language: session.detectedLanguage || session.languageCode,
-                });
-                await handleFinalTranscript(session, transcript, session.detectedLanguage || session.languageCode);
-                session.audioBuffer = [];
-                session.partialTranscript = '';
-                session.streamingTranscriptReceived = false;
-                return;
-            }
-        }
-=======
         // Try to use streaming transcript if available
         if (session.sttStream?.isReady()) {
             session.sttStream.flushAudio();
@@ -546,7 +402,6 @@ async function handleAudioEnd(session) {
             }
         }
         // Fallback: batch STT
->>>>>>> c91130b (naveeth changes)
         await processAudioBatch(session);
         session.audioBuffer = [];
         session.partialTranscript = '';
@@ -558,49 +413,16 @@ async function handleAudioEnd(session) {
 }
 async function processAudioBatch(session) {
     session.stage = 'processing';
-<<<<<<< HEAD
-    send(session, {
-        type: 'status',
-        status: 'Processing...',
-        stage: 'processing',
-    });
-    try {
-        const combinedAudio = Buffer.concat(session.audioBuffer);
-        if (combinedAudio.length < 8000) {
-            session.isRecording = true;
-            session.stage = 'listening';
-            send(session, { type: 'status', status: 'Listening...', stage: 'listening' });
-=======
     send(session, { type: 'status', status: 'Processing...', stage: 'processing' });
     try {
         const combinedAudio = Buffer.concat(session.audioBuffer);
         if (combinedAudio.length < MIN_AUDIO_BYTES) {
             resumeListening(session);
->>>>>>> c91130b (naveeth changes)
             return;
         }
         const wavAudio = pcm16ToWav(combinedAudio, 16000, 1);
         const result = await sarvam.speechToTextTranslate(wavAudio, 'voice.wav', session.languageCode, 'audio/wav');
         if (!result.transcript.trim()) {
-<<<<<<< HEAD
-            session.isRecording = true;
-            session.stage = 'listening';
-            send(session, { type: 'status', status: "I didn't catch that. Please speak again.", stage: 'listening' });
-            return;
-        }
-        send(session, {
-            type: 'transcript',
-            text: result.transcript,
-            isFinal: true,
-            language: result.language,
-        });
-        if (result.translatedText && result.translatedText !== result.transcript) {
-            send(session, {
-                type: 'translation',
-                original: result.transcript,
-                translated: result.translatedText,
-            });
-=======
             resumeListening(session);
             send(session, { type: 'status', status: "I didn't catch that. Please speak again.", stage: 'listening' });
             return;
@@ -608,27 +430,10 @@ async function processAudioBatch(session) {
         send(session, { type: 'transcript', text: result.transcript, isFinal: true, language: result.language });
         if (result.translatedText && result.translatedText !== result.transcript) {
             send(session, { type: 'translation', original: result.transcript, translated: result.translatedText });
->>>>>>> c91130b (naveeth changes)
         }
         await handleFinalTranscript(session, result.translatedText || result.transcript, result.language);
     }
     catch (error) {
-<<<<<<< HEAD
-        console.error('[Fusion] Batch processing failed:', error);
-        send(session, {
-            type: 'error',
-            message: 'Failed to process audio. Please try again.',
-        });
-        session.isRecording = true;
-        session.stage = 'listening';
-        send(session, {
-            type: 'status',
-            status: 'Listening...',
-            stage: 'listening',
-        });
-    }
-}
-=======
         const isNetworkError = error?.code === 'ENOTFOUND' || error?.message?.includes('ENOTFOUND');
         console.error('[Fusion] Batch STT failed:', error?.message || error);
         if (isNetworkError) {
@@ -641,7 +446,6 @@ async function processAudioBatch(session) {
     }
 }
 // ─── Transcript → AI Response ───────────────
->>>>>>> c91130b (naveeth changes)
 async function handleFinalTranscript(session, transcript, language) {
     if (language && language !== 'unknown') {
         session.detectedLanguage = language;
@@ -649,105 +453,6 @@ async function handleFinalTranscript(session, transcript, language) {
     }
     session.context.lastUserMessage = transcript;
     extractContext(session, transcript);
-<<<<<<< HEAD
-    session.history.push({
-        role: 'user',
-        content: transcript,
-        timestamp: new Date(),
-    });
-    await processWithAI(session);
-}
-async function processWithAI(session) {
-    const startTime = Date.now();
-    session.stage = 'processing';
-    send(session, {
-        type: 'status',
-        status: 'Thinking...',
-        stage: 'processing',
-    });
-    if (session.currentChatSignal) {
-        session.currentChatSignal.abort();
-    }
-    session.currentChatSignal = new AbortController();
-    try {
-        send(session, { type: 'agent_response_start' });
-        let fullResponse = '';
-        await sarvam.streamChatCompletion([
-            { role: 'system', content: buildSystemPrompt(session) },
-            ...session.history.slice(-6).map((item) => ({
-                role: (item.role === 'agent' ? 'assistant' : 'user'),
-                content: item.content,
-            })),
-        ], {
-            onToken: (token) => {
-                fullResponse += token;
-                send(session, { type: 'agent_response_token', token });
-            },
-            onComplete: (text) => {
-                fullResponse = text.trim() || fullResponse.trim() || getFallbackResponse();
-            },
-            onError: (error) => {
-                throw new Error(error);
-            },
-        }, session.currentChatSignal.signal);
-        const finalText = fullResponse.trim() || getFallbackResponse();
-        session.context.lastAgentResponse = finalText;
-        session.history.push({
-            role: 'agent',
-            content: finalText,
-            timestamp: new Date(),
-        });
-        send(session, {
-            type: 'agent_response_complete',
-            text: finalText,
-            actions: generateActions(session),
-        });
-        session.stage = 'listening';
-        session.isRecording = true;
-        send(session, {
-            type: 'status',
-            status: 'Listening...',
-            stage: 'listening',
-        });
-        console.log(`[Fusion] Full AI response in ${Date.now() - startTime}ms`);
-    }
-    catch (error) {
-        if (isAbortLikeError(error)) {
-            return;
-        }
-        console.error('[Fusion] AI processing failed:', error);
-        const fallback = getFallbackResponse();
-        session.context.lastAgentResponse = fallback;
-        session.history.push({
-            role: 'agent',
-            content: fallback,
-            timestamp: new Date(),
-        });
-        send(session, {
-            type: 'agent_response_complete',
-            text: fallback,
-            actions: generateActions(session),
-        });
-        session.stage = 'listening';
-        session.isRecording = true;
-        send(session, {
-            type: 'status',
-            status: 'Listening...',
-            stage: 'listening',
-        });
-    }
-    finally {
-        session.currentChatSignal = undefined;
-    }
-}
-async function handleInterrupt(session) {
-    console.log(`[Fusion] Interrupt received for session ${session.sessionId}`);
-    if (session.currentChatSignal) {
-        session.currentChatSignal.abort();
-        session.currentChatSignal = undefined;
-    }
-    session.isRecording = true;
-=======
     session.history.push({ role: 'user', content: transcript, timestamp: new Date() });
     await processWithAI(session);
 }
@@ -868,27 +573,15 @@ function handleInterrupt(session) {
     }
     if (session.accumulateTimer)
         clearTimeout(session.accumulateTimer);
->>>>>>> c91130b (naveeth changes)
     session.isHandlingAudioEnd = false;
     session.audioBuffer = [];
     session.partialTranscript = '';
     session.streamingTranscriptReceived = false;
-<<<<<<< HEAD
-    session.stage = 'listening';
-    send(session, { type: 'interrupted' });
-    send(session, {
-        type: 'status',
-        status: 'Listening...',
-        stage: 'listening',
-    });
-}
-=======
     session.accumulatedTranscripts = [];
     send(session, { type: 'interrupted' });
     resumeListening(session);
 }
 // ─── Geolocation & Auto-Dispatch ────────────
->>>>>>> c91130b (naveeth changes)
 function handleGeolocation(session, message) {
     session.context.latitude = message.latitude;
     session.context.longitude = message.longitude;
@@ -904,25 +597,14 @@ async function autoDispatch(session) {
     session.context.dispatched = true;
     const incidentType = session.context.emergencyType || 'other';
     const location = session.context.location || 'Unknown';
-<<<<<<< HEAD
-    const lat = session.context.latitude;
-    const lng = session.context.longitude;
-=======
->>>>>>> c91130b (naveeth changes)
     send(session, {
         type: 'dispatch',
         incident_type: incidentType,
         location,
-<<<<<<< HEAD
-        latitude: lat,
-        longitude: lng,
-    });
-=======
         latitude: session.context.latitude,
         longitude: session.context.longitude,
     });
     // Fire-and-forget ingest
->>>>>>> c91130b (naveeth changes)
     void (async () => {
         try {
             const serverPort = process.env.PORT || 3001;
@@ -948,10 +630,7 @@ async function autoDispatch(session) {
         }
     })();
 }
-<<<<<<< HEAD
-=======
 // ─── Context Extraction ─────────────────────
->>>>>>> c91130b (naveeth changes)
 function extractContext(session, message) {
     const lowerMsg = message.toLowerCase();
     const ctx = session.context;
@@ -963,11 +642,7 @@ function extractContext(session, message) {
         else if (lowerMsg.includes('accident') || lowerMsg.includes('crash') || lowerMsg.includes('collision')) {
             ctx.emergencyType = 'road_accident';
         }
-<<<<<<< HEAD
-        else if (lowerMsg.includes('flood') || lowerMsg.includes('water') || lowerMsg.includes('drowning')) {
-=======
         else if (lowerMsg.includes('flood') || lowerMsg.includes('water') || lowerMsg.includes('drowning') || lowerMsg.includes('stuck in') || lowerMsg.includes('thanni')) {
->>>>>>> c91130b (naveeth changes)
             ctx.emergencyType = 'flood';
         }
         else if (lowerMsg.includes('collapse') || lowerMsg.includes('building') || lowerMsg.includes('fall')) {
@@ -981,11 +656,7 @@ function extractContext(session, message) {
         }
     }
     if (!ctx.peopleAffected) {
-<<<<<<< HEAD
-        const numberMatch = message.match(/(\d+)\s*(people|persons|individuals|victims|injured|hurt|log)/i);
-=======
         const numberMatch = message.match(/(\d+)\s*(people|persons|individuals|victims|injured|hurt)/i);
->>>>>>> c91130b (naveeth changes)
         if (numberMatch) {
             ctx.peopleAffected = parseInt(numberMatch[1], 10);
         }
@@ -1005,49 +676,6 @@ function extractContext(session, message) {
         void autoDispatch(session);
     }
 }
-<<<<<<< HEAD
-function buildSystemPrompt(session) {
-    const ctx = session.context;
-    const emergencyGuide = ctx.emergencyType
-        ? FIRST_AID_GUIDES[ctx.emergencyType] || FIRST_AID_GUIDES.default
-        : null;
-    const firstAidInfo = emergencyGuide
-        ? `\nFirst aid steps for ${ctx.emergencyType}:\n${emergencyGuide.steps.map((step, index) => `${index + 1}. ${step}`).join('\n')}\nDo NOT:\n${emergencyGuide.donts.join('\n')}`
-        : '';
-    const stageInstructions = {
-        greeting: 'Greet them warmly and ask what is happening.',
-        listening: 'Acknowledge what they said and ask the most important follow-up.',
-        processing: 'Give clear, practical advice and keep them calm.',
-        idle: 'Be ready to help immediately.',
-    };
-    const history = session.history
-        .slice(-4)
-        .map((item) => `${item.role === 'user' ? 'User' : 'Agent'}: ${item.content}`)
-        .join('\n');
-    return `${stageInstructions[session.stage] || stageInstructions.greeting}
-
-CRITICAL RULES:
-- NEVER ask for the user's location. GPS is already captured when available.
-- Focus on what happened, injuries, people affected, and immediate first aid.
-${ctx.dispatched ? '- Emergency services have already been notified. Tell the user help is on the way.' : ''}
-${emergencyGuide ? '- Once the emergency type is clear, provide specific first aid guidance immediately.' : ''}
-
-Current context: ${JSON.stringify({
-        emergencyType: ctx.emergencyType,
-        severity: ctx.severity,
-        peopleAffected: ctx.peopleAffected,
-        locationAvailable: !!(ctx.latitude && ctx.longitude),
-        helpDispatched: !!ctx.dispatched,
-    })}
-${firstAidInfo}
-
-Recent conversation:
-${history}
-
-Emergency numbers: Ambulance 108, National Emergency 112, Fire 101, Police 100.
-
-You are a calm human emergency responder speaking naturally. Use short, warm, direct sentences. Keep replies to 1-2 sentences, under 30 words, and avoid bullet points.`;
-=======
 // ─── System Prompt ──────────────────────────
 function buildSystemPrompt(session) {
     const ctx = session.context;
@@ -1150,7 +778,6 @@ function getContextualFallback(session) {
         "Can you tell me exactly where you are?",
     ];
     return fallbacks[Math.floor(Math.random() * fallbacks.length)];
->>>>>>> c91130b (naveeth changes)
 }
 function pcm16ToWav(pcmData, sampleRate, channels) {
     const bitsPerSample = 16;
@@ -1172,25 +799,6 @@ function pcm16ToWav(pcmData, sampleRate, channels) {
     header.writeUInt32LE(pcmData.length, 40);
     return Buffer.concat([header, pcmData]);
 }
-<<<<<<< HEAD
-function isAbortLikeError(error) {
-    const message = error instanceof Error ? error.message : typeof error === 'string' ? error : '';
-    const normalized = message.toLowerCase();
-    return ['aborted', 'aborterror', 'canceled', 'cancelled'].some((token) => normalized.includes(token));
-}
-function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
-function getFallbackResponse() {
-    const fallbacks = [
-        "I'm here to help. Tell me exactly what is happening.",
-        "Stay with me and keep breathing slowly. What injuries do you see right now?",
-        'Help is available. Tell me what happened and how many people are affected.',
-    ];
-    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
-}
-=======
->>>>>>> c91130b (naveeth changes)
 function generateActions(session) {
     const actions = [];
     const ctx = session.context;
@@ -1221,19 +829,11 @@ function generateActions(session) {
     });
     return actions;
 }
-<<<<<<< HEAD
-setInterval(() => {
-    const now = Date.now();
-    const maxAge = 30 * 60 * 1000;
-    for (const [id, session] of sessions.entries()) {
-        if (now - session.lastActivity.getTime() > maxAge) {
-=======
 // ─── Session Cleanup Timer ──────────────────
 setInterval(() => {
     const now = Date.now();
     for (const [id, session] of sessions.entries()) {
         if (now - session.lastActivity.getTime() > SESSION_TTL_MS) {
->>>>>>> c91130b (naveeth changes)
             if (session.ws.readyState === ws_1.WebSocket.OPEN) {
                 session.ws.close(1000, 'Session timeout');
             }

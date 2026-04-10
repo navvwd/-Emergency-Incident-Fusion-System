@@ -24,10 +24,7 @@ import IncidentFeed from './components/dashboard/IncidentFeed';
 import StatsBar from './components/dashboard/StatsBar';
 import SeverityChart from './components/dashboard/SeverityChart';
 import ReportForm from './components/dashboard/ReportForm';
-<<<<<<< HEAD
-=======
 import MetricsPanel from './components/dashboard/MetricsPanel';
->>>>>>> c91130b (naveeth changes)
 import { LiveAgent, GeminiLiveMode } from './components/agent';
 
 type MobileTab = 'map' | 'feed' | 'stats';
@@ -81,11 +78,7 @@ function MobileNav({
     <nav className="fixed bottom-0 left-0 right-0 h-16 bg-[#0a0e14] border-t border-[#31353c]/30 flex items-center justify-around px-4 z-[var(--z-sticky)] hide-desktop">
       <button
         onClick={() => onTabChange('map')}
-<<<<<<< HEAD
-        className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'map' ? 'text-[#adc6ff]' : 'text-[#dfe2eb]/40'}`}
-=======
         className={`flex flex-col items-center gap-1 min-h-[44px] transition-colors ${activeTab === 'map' ? 'text-[#adc6ff]' : 'text-[#dfe2eb]/40'}`}
->>>>>>> c91130b (naveeth changes)
       >
         <MaterialIcon name="map" />
         <span className="text-[8px] font-bold uppercase tracking-widest">Map</span>
@@ -94,11 +87,7 @@ function MobileNav({
       {/* Report Button - Central CTA */}
       <button
         onClick={onReportClick}
-<<<<<<< HEAD
-        className="flex flex-col items-center gap-1 -mt-6"
-=======
         className="flex flex-col items-center gap-1 -mt-6 min-h-[44px]"
->>>>>>> c91130b (naveeth changes)
       >
         <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[var(--tertiary)] to-[var(--tertiary-container)] flex items-center justify-center shadow-[0_0_20px_rgba(255,176,148,0.3)] active:scale-95 transition-transform">
           <MaterialIcon name="add" className="text-[var(--on-tertiary)] text-2xl" filled />
@@ -108,11 +97,7 @@ function MobileNav({
 
       <button
         onClick={() => onTabChange('feed')}
-<<<<<<< HEAD
-        className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'feed' ? 'text-[#adc6ff]' : 'text-[#dfe2eb]/40'}`}
-=======
         className={`flex flex-col items-center gap-1 min-h-[44px] transition-colors ${activeTab === 'feed' ? 'text-[#adc6ff]' : 'text-[#dfe2eb]/40'}`}
->>>>>>> c91130b (naveeth changes)
       >
         <MaterialIcon name="list" />
         <span className="text-[8px] font-bold uppercase tracking-widest">Feed</span>
@@ -184,11 +169,8 @@ function MobileStatsView({ incidents }: { incidents: any[] }) {
         </div>
         <SeverityChart incidents={incidents} />
       </div>
-<<<<<<< HEAD
-=======
 
       <MetricsPanel />
->>>>>>> c91130b (naveeth changes)
     </div>
   );
 }
@@ -244,10 +226,7 @@ function ReportModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
         className={`
           absolute left-0 right-0 bottom-0 md:left-1/2 md:top-1/2 md:bottom-auto md:-translate-x-1/2 md:-translate-y-1/2
           md:w-full md:max-w-lg
-<<<<<<< HEAD
-=======
           h-screen md:h-auto
->>>>>>> c91130b (naveeth changes)
           bottom-sheet
           ${isClosing ? 'translate-y-full md:scale-95 md:opacity-0' : ''}
         `}
@@ -282,11 +261,7 @@ function ReportModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
           </div>
           <button
             onClick={handleClose}
-<<<<<<< HEAD
-            className="w-9 h-9 rounded-lg bg-[var(--surface-container)] flex items-center justify-center text-[var(--on-surface-variant)] hover:text-[var(--on-surface)] transition-colors focus-ring"
-=======
             className="w-9 h-9 min-h-[44px] min-w-[44px] rounded-lg bg-[var(--surface-container)] flex items-center justify-center text-[var(--on-surface-variant)] hover:text-[var(--on-surface)] transition-colors focus-ring"
->>>>>>> c91130b (naveeth changes)
             aria-label="Close modal"
           >
             <MaterialIcon name="close" className="text-sm" />
@@ -406,12 +381,9 @@ function Dashboard() {
             <div className="border-b border-[var(--outline-variant)]/20">
               <SeverityChart incidents={incidents} />
             </div>
-<<<<<<< HEAD
-=======
             <div className="px-4 pt-3">
               <MetricsPanel />
             </div>
->>>>>>> c91130b (naveeth changes)
             <div className="flex-1 overflow-hidden">
               <IncidentFeed incidents={incidents} loading={loading} />
             </div>

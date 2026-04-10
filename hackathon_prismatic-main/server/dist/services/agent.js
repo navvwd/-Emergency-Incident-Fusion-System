@@ -142,19 +142,11 @@ const EMERGENCY_NUMBERS = [
 ];
 // ─── Calming Messages ────────────────────────
 const CALMING_MESSAGES = [
-<<<<<<< HEAD
-    "I'm here with you. Take a deep breath - we're going to get through this together.",
-    "You're doing great. Help is on the way, and I'm here to guide you.",
-    "Stay calm. Every second counts, and your actions can make a difference.",
-    "You're not alone. I'm here to help you handle this situation.",
-    "Take a moment to breathe. Clear thinking will help everyone right now.",
-=======
     "I'm right here. Take a breath - we'll get through this.",
     "You're doing great. I've got you.",
     "Okay, you're handling this. Keep breathing.",
     "I'm not going anywhere. We're in this together.",
     "Just breathe. One thing at a time.",
->>>>>>> c91130b (naveeth changes)
 ];
 // ─── Session Management ──────────────────────
 function createSession(languageCode = 'en-IN', userId) {
@@ -198,53 +190,6 @@ setInterval(() => {
 // ─── LLM Prompt Builder ──────────────────────
 function buildAgentPrompt(session, userMessage) {
     const stageInstructions = {
-<<<<<<< HEAD
-        greeting: `You are an Emergency Response AI Agent. The user has just started a conversation during a potential emergency.
-
-Your goals:
-1. Calm the user with a warm, professional tone
-2. Ask what type of emergency they're facing
-3. Assure them you're here to help
-
-Respond in a conversational, empathetic manner. Keep it brief (2-3 sentences).`,
-        assessing: `You're assessing an emergency situation. The user has indicated: ${session.context.emergencyType || 'unknown emergency'}
-
-Your goals:
-1. Ask about their location (be specific - area and city)
-2. Ask if anyone is injured
-3. Ask how many people are affected
-4. Provide immediate reassurance
-
-Be empathetic but efficient. Lives may be at stake.`,
-        gathering: `You're gathering details about a ${session.context.emergencyType} emergency at ${session.context.location || 'unknown location'}.
-
-Your goals:
-1. Ask specific questions about the situation
-2. Determine severity (low/medium/high/critical)
-3. Keep the user calm
-4. Prepare to give first aid advice
-
-Current context: ${JSON.stringify(session.context)}`,
-        advice: `The user needs immediate first aid/precaution guidance for: ${session.context.emergencyType}
-
-Your goals:
-1. Give clear, actionable first aid steps
-2. List what NOT to do
-3. Provide emergency contact numbers
-4. Keep instructions simple and numbered
-5. End with reassurance
-
-DO NOT give medical advice beyond basic first aid. Always recommend calling emergency services.`,
-        closing: `You're wrapping up the emergency assistance.
-
-Your goals:
-1. Summarize what help is coming
-2. Remind them to stay calm
-3. Tell them they can report the incident through the app
-4. Offer final words of support
-
-Be encouraging and professional.`,
-=======
         greeting: `The user just reached out during an emergency. You're a calm, experienced emergency responder.
 
 Speak like a real person would:
@@ -288,7 +233,6 @@ End like a caring person would:
 - Leave them feeling supported, not dismissed
 
 Example: "Alright, you've got this. Help is coming and you've done everything right. Stay on the line if you need me."`,
->>>>>>> c91130b (naveeth changes)
     };
     const history = session.history
         .slice(-4)
@@ -296,21 +240,12 @@ Example: "Alright, you've got this. Help is coming and you've done everything ri
         .join('\n');
     return `${stageInstructions[session.stage]}
 
-<<<<<<< HEAD
-Conversation history:
-${history}
-
-User's message: "${userMessage}"
-
-Respond as the Emergency AI Agent. Be concise, clear, and calming.`;
-=======
 Conversation so far:
 ${history}
 
 They just said: "${userMessage}"
 
 Respond like a calm, caring human responder. 2-3 sentences max. Warm, natural, direct.`;
->>>>>>> c91130b (naveeth changes)
 }
 // ─── Process User Message ────────────────────
 async function processMessage(sessionId, userMessage, audioBuffer) {
@@ -341,8 +276,6 @@ async function processMessage(sessionId, userMessage, audioBuffer) {
     });
     // Extract context from user message
     extractContext(session, textMessage);
-<<<<<<< HEAD
-=======
     // ── Hard bypass: Meta questions never reach LLM ──
     const META_PATTERNS = [
         /what are you/i, /who are you/i, /your (purpose|role|instructions|job|prompt)/i,
@@ -363,7 +296,6 @@ async function processMessage(sessionId, userMessage, audioBuffer) {
             stage: session.stage,
         };
     }
->>>>>>> c91130b (naveeth changes)
     // Get AI response using Sarvam Chat
     const agentResponse = await generateAgentResponse(session, textMessage);
     // Add agent response to history
@@ -445,29 +377,6 @@ function extractContext(session, message) {
 // ─── Generate Agent Response ─────────────────
 async function generateAgentResponse(session, userMessage) {
     try {
-<<<<<<< HEAD
-        const prompt = buildAgentPrompt(session, userMessage);
-        const client = require('./sarvam').getSarvamChatClient();
-        const response = await client.post('/v1/chat/completions', {
-            model: 'sarvam-30b',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are an Emergency Response AI Agent. Be empathetic, clear, and actionable. Keep responses concise (2-4 sentences) for voice delivery.',
-                },
-                {
-                    role: 'user',
-                    content: prompt,
-                },
-            ],
-            temperature: 0.7,
-            max_tokens: 2048,
-        });
-        const msg = response.data.choices?.[0]?.message;
-        return {
-            text: msg?.content || msg?.reasoning_content || getFallbackResponse(session.stage),
-        };
-=======
         const client = require('./sarvam').getSarvamChatClient();
         // ── STRUCTURAL FIX: Instructions in system role, not user ──
         const messages = [
@@ -517,23 +426,12 @@ async function generateAgentResponse(session, userMessage) {
             text = getFallbackResponse(session.stage);
         }
         return { text: text || getFallbackResponse(session.stage) };
->>>>>>> c91130b (naveeth changes)
     }
     catch (error) {
         console.error('[Agent] Chat completion failed:', error);
         return { text: getFallbackResponse(session.stage) };
     }
 }
-<<<<<<< HEAD
-// ─── Fallback Responses ──────────────────────
-function getFallbackResponse(stage) {
-    const fallbacks = {
-        greeting: "Hello, I'm your emergency assistant. Take a deep breath - I'm here to help. What type of emergency are you facing?",
-        assessing: 'Can you tell me your location and if anyone is injured?',
-        gathering: 'Please provide more details about the situation so I can guide you better.',
-        advice: 'Here are the immediate steps you should take. First, ensure your own safety.',
-        closing: 'Help is on the way. Stay calm and follow the instructions I provided.',
-=======
 /** Stage context for system prompt (no conversation history, no user message) */
 function getStageContext(session) {
     const ctx = session.context;
@@ -560,7 +458,6 @@ function getFallbackResponse(stage) {
         gathering: "Tell me more - what's happening there?",
         advice: "Okay, here's what I need you to do. First, make sure you're safe.",
         closing: "You've done great. Help is coming. Stay with me.",
->>>>>>> c91130b (naveeth changes)
     };
     return fallbacks[stage] || fallbacks.greeting;
 }
@@ -634,11 +531,7 @@ function updateStage(session) {
 // ─── Initialize Session ──────────────────────
 async function initializeSession(languageCode = 'en-IN') {
     const session = createSession(languageCode);
-<<<<<<< HEAD
-    const greeting = "Hello, I'm your Emergency Response Assistant. I'm here to help you through this situation. Take a deep breath with me. Can you tell me what type of emergency you're facing?";
-=======
     const greeting = "Hey, I'm here with you. Take a breath - we'll get through this together. Can you tell me what's happening?";
->>>>>>> c91130b (naveeth changes)
     session.history.push({
         role: 'agent',
         content: greeting,

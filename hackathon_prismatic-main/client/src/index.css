@@ -5,8 +5,6 @@
 @tailwind components;
 @tailwind utilities;
 
-<<<<<<< HEAD
-=======
 * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
 body {
   overscroll-behavior: none;
@@ -14,7 +12,6 @@ body {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
->>>>>>> c91130b (naveeth changes)
 :root {
   /* ═══════════════════════════════════════════════════════════
      TACTICAL INTELLIGENCE & COMMAND - Design System

@@ -60,13 +60,10 @@ class SarvamStreamingSTT {
     constructor(apiKey, callbacks, targetLanguage = 'en-IN') {
         this.ws = null;
         this.isConnected = false;
-<<<<<<< HEAD
-=======
         this.isClosed = false;
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
         this.reconnectTimer = null;
->>>>>>> c91130b (naveeth changes)
         this.apiKey = apiKey;
         this.callbacks = callbacks;
         this.targetLanguage = targetLanguage;
@@ -74,8 +71,6 @@ class SarvamStreamingSTT {
     isReady() {
         return this.isConnected;
     }
-<<<<<<< HEAD
-=======
     scheduleReconnect() {
         if (this.isClosed || this.reconnectAttempts >= this.maxReconnectAttempts)
             return;
@@ -94,18 +89,12 @@ class SarvamStreamingSTT {
             }
         }, delay);
     }
->>>>>>> c91130b (naveeth changes)
     connect() {
         return new Promise((resolve, reject) => {
             const langConfig = LANGUAGE_CONFIG[normalizeLanguageCode(this.targetLanguage)];
             const wsUrl = `${SARVAM_WS_URL}/speech-to-text/ws?language-code=${langConfig.sttCode}` +
-<<<<<<< HEAD
-                '&model=saaras:v3&mode=transcribe&sample_rate=16000' +
-                '&input_audio_codec=pcm_s16le&vad_signals=true&flush_signal=true&high_vad_sensitivity=true';
-=======
                 '&model=saaras:v3&mode=translate&sample_rate=16000' +
                 '&input_audio_codec=pcm_s16le&vad_signals=true&flush_signal=true&high_vad_sensitivity=false';
->>>>>>> c91130b (naveeth changes)
             this.ws = new ws_1.default(wsUrl, {
                 headers: {
                     'Api-Subscription-Key': this.apiKey,
@@ -126,13 +115,6 @@ class SarvamStreamingSTT {
                 }
             });
             this.ws.on('error', (error) => {
-<<<<<<< HEAD
-                this.callbacks.onError(error.message);
-                reject(error);
-            });
-            this.ws.on('close', () => {
-                this.isConnected = false;
-=======
                 console.error('[Sarvam STT WS] Connection error:', error.message || error);
                 this.callbacks.onError(error.message || 'WebSocket connection error');
                 reject(error);
@@ -144,7 +126,6 @@ class SarvamStreamingSTT {
                 if (!this.isClosed && code !== 1000) {
                     this.scheduleReconnect();
                 }
->>>>>>> c91130b (naveeth changes)
             });
         });
     }
@@ -179,29 +160,6 @@ class SarvamStreamingSTT {
             return;
         }
         if (message.type === 'error') {
-<<<<<<< HEAD
-            this.callbacks.onError(message.message || 'Unknown error');
-        }
-    }
-    sendAudioChunk(audioChunk) {
-        if (!this.isConnected || !this.ws)
-            return;
-        this.ws.send(JSON.stringify({
-            audio: audioChunk.toString('base64'),
-            encoding: 'pcm_s16le',
-            sample_rate: 16000,
-        }));
-    }
-    flushAudio() {
-        if (!this.isConnected || !this.ws)
-            return;
-        this.ws.send(JSON.stringify({ flush: true }));
-    }
-    close() {
-        this.flushAudio();
-        this.ws?.close();
-        this.ws = null;
-=======
             this.callbacks.onError(message.data?.message || message.message || 'Unknown error');
         }
     }
@@ -259,7 +217,6 @@ class SarvamStreamingSTT {
             }
             this.ws = null;
         }
->>>>>>> c91130b (naveeth changes)
         this.isConnected = false;
     }
 }
@@ -275,12 +232,8 @@ async function streamChatCompletion(messages, callbacks, abortSignal) {
                 model: 'sarvam-105b',
                 messages,
                 temperature: 0.5,
-<<<<<<< HEAD
-                max_tokens: 150,
-=======
                 max_tokens: 60,
                 frequency_penalty: 1.2,
->>>>>>> c91130b (naveeth changes)
                 stream: true,
             }, {
                 headers: {
@@ -335,12 +288,8 @@ async function streamChatCompletion(messages, callbacks, abortSignal) {
                             model: 'sarvam-105b',
                             messages,
                             temperature: 0.5,
-<<<<<<< HEAD
-                            max_tokens: 150,
-=======
                             max_tokens: 60,
                             frequency_penalty: 1.2,
->>>>>>> c91130b (naveeth changes)
                         }, {
                             headers: {
                                 Authorization: `Bearer ${apiKey}`,
@@ -381,12 +330,8 @@ async function streamChatCompletion(messages, callbacks, abortSignal) {
                 model: 'sarvam-105b',
                 messages,
                 temperature: 0.2,
-<<<<<<< HEAD
-                max_tokens: 72,
-=======
                 max_tokens: 60,
                 frequency_penalty: 1.2,
->>>>>>> c91130b (naveeth changes)
             }, {
                 headers: {
                     Authorization: `Bearer ${apiKey}`,

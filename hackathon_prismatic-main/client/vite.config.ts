@@ -1,11 +1,5 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-<<<<<<< HEAD
-
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-=======
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
@@ -31,7 +25,6 @@ export default defineConfig({
       },
     }),
   ],
->>>>>>> c91130b (naveeth changes)
   server: {
     host: '0.0.0.0',
     port: 5173,

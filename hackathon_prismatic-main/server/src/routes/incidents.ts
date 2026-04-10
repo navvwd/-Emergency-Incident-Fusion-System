@@ -44,8 +44,6 @@ router.get('/incidents', async (_req: Request, res: Response): Promise<void> => 
   }
 });
 
-<<<<<<< HEAD
-=======
 // ── Fusion Log endpoints (inspection + feedback loop) ──
 
 /**
@@ -97,5 +95,4 @@ router.patch('/fusion-log/:id/label', async (req: Request, res: Response): Promi
   }
 });
 
->>>>>>> c91130b (naveeth changes)
 export default router;
