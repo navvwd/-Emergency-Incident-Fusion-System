@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.eifs.app-merged_res-31:/layout_activity_main.xml.flat",
+        "source": "com.eifs.app-main-33:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.eifs.app-merged_res-31:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.eifs.app-main-33:/mipmap-hdpi/ic_launcher.png"
+    }
+]

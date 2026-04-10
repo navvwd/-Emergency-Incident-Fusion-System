@@ -1,0 +1,149 @@
+
+> eifs-server@1.0.0 start
+> node dist/index.js
+
+[LiveVoice] WebSocket server initialized at /ws/live-voice
+[LiveVoice V2] WebSocket server initialized at /ws/live-voice-v2
+🚀 EIFS server running on http://localhost:3001
+📡 Health check: http://localhost:3001/health
+📥 Ingest:      POST http://localhost:3001/api/ingest-report
+📊 Incidents:   GET  http://localhost:3001/api/incidents
+🤖 AI Agent:    POST http://localhost:3001/api/agent/init
+🎙️  Live Voice:  ws://localhost:3001/ws/live-voice
+⚡ Live Voice V2: ws://localhost:3001/ws/live-voice-v2
+[LiveVoice V2] New client connected: ::1
+[LiveVoice V2] Session created: 4408c308-a418-4fa2-98f7-b13d488094c5, lang: en-IN
+[Sarvam TTS] Request payload: {"inputs":["Hello, I'm your Emergency Response Assistant. I'm here to help you. Please tell me what emergency you're facing."],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[Sarvam TTS] Generated 319916 bytes in 4088ms | lang=en-IN, speaker=aditya
+[LiveVoice V2] Message handled in 4099ms: start
+[LiveVoice V2] Client disconnected. Code: 1005, Reason: 
+[Sarvam TTS] Request payload: {"inputs":["Hello, I'm your Emergency Response Assistant. I'm here to help you through this situation. Take a deep breath with me. Can you tell me what type of emergency you're facing?"],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[LiveVoice V2] Stats: 0 connected, {"total":1,"byStage":{"listening":1}}
+[LiveVoice V2] New client connected: ::1
+[LiveVoice V2] Session created: e0d7f804-e271-4972-af64-eed6785c59cf, lang: en-IN
+[Sarvam TTS] Request payload: {"inputs":["Hello, I'm your Emergency Response Assistant. I'm here to help you. Please tell me what emergency you're facing."],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[Sarvam TTS] Generated 477970 bytes in 5444ms | lang=en-IN, speaker=aditya
+[Sarvam TTS] Generated 331206 bytes in 3889ms | lang=en-IN, speaker=aditya
+[LiveVoice V2] Message handled in 3914ms: start
+[LiveVoice V2] Stats: 1 connected, {"total":2,"byStage":{"listening":2}}
+[LiveVoice V2] Session created: b0eb8747-26d1-4f6d-be0e-0e00cacc36ee, lang: en-IN
+[Sarvam STT] Transcribed + translated in 1358ms | lang=en-IN
+[LiveVoice V2] STT+Translate completed in 1359ms
+[Sarvam TTS] Request payload: {"inputs":["Help is available. Let me guide you through the next steps."],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[Sarvam TTS] Generated 184440 bytes in 2289ms | lang=en-IN, speaker=aditya
+[LiveVoice V2] Full AI processing completed in 3082ms
+[LiveVoice V2] Stats: 1 connected, {"total":3,"byStage":{"listening":2,"greeting":1}}
+[LiveVoice V2] Session created: e81fd2b0-1048-461a-8ef3-251bc232840e, lang: en-IN
+[LiveVoice V2] Stats: 1 connected, {"total":4,"byStage":{"listening":2,"greeting":2}}
+[LiveVoice V2] Session created: c2709033-769d-40d5-b614-f0296f5daf8f, lang: en-IN
+[LiveVoice V2] Stats: 1 connected, {"total":5,"byStage":{"listening":2,"greeting":3}}
+[LiveVoice V2] Session created: 85d55438-ab85-4f28-8151-9fbbb396d8a1, lang: en-IN
+[LiveVoice V2] Stats: 1 connected, {"total":6,"byStage":{"listening":2,"greeting":4}}
+[LiveVoice V2] Session created: 1cff0e30-ecea-41ae-bb71-d656490b42c5, lang: en-IN
+[LiveVoice V2] Stats: 1 connected, {"total":7,"byStage":{"listening":2,"greeting":5}}
+[LiveVoice V2] Session created: 78c68a88-e53c-49cd-8fdd-a88cde33b643, lang: en-IN
+[LiveVoice V2] Client disconnected. Code: 1005, Reason: 
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[Sarvam TTS] Request payload: {"inputs":["Hello, I'm your Emergency Response Assistant. I'm here to help you through this situation. Take a deep breath with me. Can you tell me what type of emergency you're facing?"],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[LiveVoice V2] Stats: 0 connected, {"total":8,"byStage":{"listening":2,"greeting":6}}
+[Sarvam TTS] Generated 455392 bytes in 5292ms | lang=en-IN, speaker=aditya
+[LiveVoice V2] New client connected: ::1
+[LiveVoice V2] Session created: 119e63c2-4702-41cd-bb2f-e248a325f3b5, lang: en-IN
+[Sarvam TTS] Request payload: {"inputs":["Hello, I'm your Emergency Response Assistant. I'm here to help you. Please tell me what emergency you're facing."],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[Sarvam TTS] Generated 338732 bytes in 3865ms | lang=en-IN, speaker=aditya
+[LiveVoice V2] Message handled in 3905ms: start
+[LiveVoice V2] Stats: 1 connected, {"total":9,"byStage":{"listening":3,"greeting":6}}
+[LiveVoice V2] Session created: 2d4b825e-b715-4c39-aa62-a0ce4d3a28a0, lang: en-IN
+[Sarvam STT] Transcribed + translated in 1614ms | lang=en-IN
+[LiveVoice V2] STT+Translate completed in 1616ms
+[Sarvam TTS] Request payload: {"inputs":["I understand this is difficult. Stay calm, and let's work through this together."],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[Sarvam TTS] Generated 270994 bytes in 3166ms | lang=en-IN, speaker=aditya
+[LiveVoice V2] Full AI processing completed in 4013ms
+[LiveVoice V2] Stats: 1 connected, {"total":10,"byStage":{"listening":3,"greeting":7}}
+[LiveVoice V2] Session created: 27af7051-7bce-4ca6-8b64-37a05e500c89, lang: en-IN
+[LiveVoice V2] Stats: 1 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Client disconnected. Code: 1001, Reason: 
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Stats: 0 connected, {"total":11,"byStage":{"listening":3,"greeting":8}}
+[LiveVoice V2] Cleaning up expired session: 4408c308-a418-4fa2-98f7-b13d488094c5
+[LiveVoice V2] Cleaning up expired session: e0d7f804-e271-4972-af64-eed6785c59cf
+[LiveVoice V2] Cleaning up expired session: b0eb8747-26d1-4f6d-be0e-0e00cacc36ee
+[LiveVoice V2] Cleaning up expired session: e81fd2b0-1048-461a-8ef3-251bc232840e
+[LiveVoice V2] Cleaning up expired session: c2709033-769d-40d5-b614-f0296f5daf8f
+[LiveVoice V2] Cleaning up expired session: 85d55438-ab85-4f28-8151-9fbbb396d8a1
+[LiveVoice V2] Cleaning up expired session: 1cff0e30-ecea-41ae-bb71-d656490b42c5
+[LiveVoice V2] Cleaning up expired session: 78c68a88-e53c-49cd-8fdd-a88cde33b643
+[LiveVoice V2] Stats: 0 connected, {"total":3,"byStage":{"listening":1,"greeting":2}}
+[LiveVoice V2] Stats: 0 connected, {"total":3,"byStage":{"listening":1,"greeting":2}}
+[LiveVoice V2] Stats: 0 connected, {"total":3,"byStage":{"listening":1,"greeting":2}}
+[LiveVoice V2] Stats: 0 connected, {"total":3,"byStage":{"listening":1,"greeting":2}}
+[LiveVoice V2] Stats: 0 connected, {"total":3,"byStage":{"listening":1,"greeting":2}}
+[Sarvam TTS] Request payload: {"inputs":["Hello, I'm your Emergency Response Assistant. I'm here to help you through this situation. Take a deep breath with me. Can you tell me what type of emergency you're facing?"],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[LiveVoice V2] New client connected: ::1
+[LiveVoice V2] Session created: 80b1d16d-ec5e-4e2c-935e-cdf25d32a1af, lang: en-IN
+[Sarvam TTS] Request payload: {"inputs":["Hello, I'm your Emergency Response Assistant. I'm here to help you. Please tell me what emergency you're facing."],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[Sarvam TTS] Generated 466680 bytes in 5112ms | lang=en-IN, speaker=aditya
+[Sarvam TTS] Generated 282284 bytes in 3364ms | lang=en-IN, speaker=aditya
+[LiveVoice V2] Message handled in 3369ms: start
+[LiveVoice V2] Client disconnected. Code: 1001, Reason: 
+[LiveVoice V2] Stats: 0 connected, {"total":4,"byStage":{"listening":2,"greeting":2}}
+[Sarvam STT] Transcribed + translated in 1297ms | lang=en-IN
+[LiveVoice V2] STT+Translate completed in 1299ms
+[Sarvam TTS] Request payload: {"inputs":["Help is available. Let me guide you through the next steps."],"target_language_code":"en-IN","speaker":"aditya","model":"bulbul:v3"}
+[Sarvam TTS] Generated 158098 bytes in 2108ms | lang=en-IN, speaker=aditya
+[LiveVoice V2] Full AI processing completed in 2898ms

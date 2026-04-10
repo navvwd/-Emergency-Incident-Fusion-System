@@ -1,0 +1,10 @@
+R_DEF: Internal format may change without notice
+local
+color accent
+color background
+id progressBar
+id webview
+layout activity_main
+mipmap ic_launcher
+string app_name
+style AppTheme

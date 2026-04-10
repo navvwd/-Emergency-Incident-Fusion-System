@@ -1,0 +1,5 @@
+<<<<<<< HEAD
+{"version":3,"file":"moonshot.d.ts","sourceRoot":"","sources":["../../src/services/moonshot.ts"],"names":[],"mappings":"AAsBA;;;GAGG;AACH,wBAAsB,aAAa,CAAC,WAAW,EAAE,MAAM,GAAG,OAAO,CAAC,MAAM,CAAC,CAuDxE"}
+=======
+{"version":3,"file":"moonshot.d.ts","sourceRoot":"","sources":["../../src/services/moonshot.ts"],"names":[],"mappings":"AAwBA;;;GAGG;AACH,wBAAsB,aAAa,CAAC,WAAW,EAAE,MAAM,GAAG,OAAO,CAAC,MAAM,CAAC,CAuDxE;AAGD,MAAM,WAAW,aAAa;IAC5B,OAAO,EAAE,CAAC,KAAK,EAAE,MAAM,KAAK,IAAI,CAAC;IACjC,UAAU,EAAE,CAAC,IAAI,EAAE,MAAM,KAAK,IAAI,CAAC;IACnC,OAAO,EAAE,CAAC,KAAK,EAAE,MAAM,KAAK,IAAI,CAAC;CAClC;AAED;;;GAGG;AACH,wBAAsB,oBAAoB,CACxC,QAAQ,EAAE,KAAK,CAAC;IAAE,IAAI,EAAE,MAAM,CAAC;IAAC,OAAO,EAAE,MAAM,CAAA;CAAE,CAAC,EAClD,SAAS,EAAE,aAAa,EACxB,WAAW,CAAC,EAAE,WAAW,GACxB,OAAO,CAAC,IAAI,CAAC,CAwFf"}
+>>>>>>> c91130b (naveeth changes)

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AI-01 SENTINEL</string>
+    <string name="title_activity_main">AI-01 SENTINEL</string>
+    <string name="package_name">com.eifs.sentinel</string>
+    <string name="custom_url_scheme">com.eifs.sentinel</string>
+</resources>
